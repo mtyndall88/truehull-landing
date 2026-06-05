@@ -6,7 +6,7 @@
     <title>TrueHull</title>
     <meta
       name="description"
-      content="TrueHull is an early-stage boat buyer due-diligence platform being developed to help boat buyers organize information and prepare for smarter pre-purchase review."
+      content="TrueHull is an early-stage boat buyer due-diligence platform being developed to help boat buyers organize vessel information and prepare for smarter pre-purchase review."
     />
     <meta property="og:title" content="TrueHull" />
     <meta
@@ -33,23 +33,27 @@
       href="assets/favicon-16x16.png"
     />
     <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;800;900&family=Rajdhani:wght@600;700&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <header class="landing-header">
-      <div class="landing-brand">
+      <a class="landing-brand" href="/" aria-label="TrueHull home">
         <img
           class="brand-mark"
           src="assets/truehull-mark.png"
           alt=""
           aria-hidden="true"
         />
-        <img
-          class="brand-wordmark"
-          src="assets/truehull-wordmark.png"
-          alt="TrueHull"
-        />
-      </div>
+        <span class="brand-wordmark">
+          <span class="brand-true">True</span><span class="brand-hull">Hull</span>
+        </span>
+      </a>
       <a class="header-contact" href="#contact">Partnership inquiries</a>
     </header>
 
@@ -57,18 +61,18 @@
       <section class="landing-hero">
         <div class="hero-shade" aria-hidden="true"></div>
         <div class="hero-content">
-          <p class="eyebrow">Early-stage boat buyer platform</p>
+          <p class="eyebrow">Early-stage boat buyer due diligence platform</p>
           <h1>TrueHull</h1>
           <p class="hero-heading">Boat Buyer Due Diligence, Coming Soon</p>
           <p class="hero-copy">
-            TrueHull is being developed to help boat buyers organize
+            TrueHull is being developed to help boat buyers organize vessel
             information, review purchase risks, and prepare for smarter
             pre-purchase due diligence.
           </p>
           <a
             class="primary-action"
             href="mailto:mark@gettruehull.com?subject=TrueHull%20Partnership%20Inquiry"
-            >Email a partnership inquiry</a
+            >Contact TrueHull</a
           >
           <p class="hero-development-note">
             TrueHull is in early development and open to thoughtful partnership
@@ -99,15 +103,20 @@
           clearer pre-purchase review process.
         </h2>
         <p>
+          TrueHull is being designed to help buyers slow down, organize key
+          details, and ask better questions before committing to a used boat
+          purchase.
+        </p>
+        <p>
           We are currently building the first version of the TrueHull experience
-          and welcome thoughtful partnership, data, and business conversations.
+          and welcome thoughtful partnership and business conversations.
         </p>
       </section>
 
       <section id="contact" class="contact-band">
         <div>
           <p class="eyebrow">Get in touch</p>
-          <h2>Partnership inquiries are welcome.</h2>
+          <h2>Partnership and business inquiries are welcome.</h2>
         </div>
         <div class="contact-actions">
           <a
@@ -123,20 +132,21 @@
     </main>
 
     <footer class="landing-footer">
-      <div class="landing-brand">
-        <img
-          class="brand-mark"
-          src="assets/truehull-mark.png"
-          alt=""
-          aria-hidden="true"
-        />
-        <img
-          class="brand-wordmark"
-          src="assets/truehull-wordmark.png"
-          alt="TrueHull"
-        />
+      <div class="footer-brand-group">
+        <a class="landing-brand" href="/" aria-label="TrueHull home">
+          <img
+            class="brand-mark"
+            src="assets/truehull-mark.png"
+            alt=""
+            aria-hidden="true"
+          />
+          <span class="brand-wordmark">
+            <span class="brand-true">True</span><span class="brand-hull">Hull</span>
+          </span>
+        </a>
+        <p class="footer-tagline">Know the risk before you buy.</p>
       </div>
-      <p>&copy; 2026 TrueHull. All rights reserved.</p>
+      <p class="footer-copyright">&copy; 2026 TrueHull. All rights reserved.</p>
     </footer>
   </body>
 </html>

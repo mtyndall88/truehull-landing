@@ -8,6 +8,8 @@
   --foam: #f4fafb;
   --surface: #ffffff;
   --accent: #d7a12b;
+  --brand-true: #062B63;
+  --brand-hull: #0796A8;
 }
 
 * {
@@ -32,6 +34,12 @@ a {
   text-decoration: none;
 }
 
+a:focus-visible {
+  outline: 3px solid rgba(7, 150, 168, 0.35);
+  outline-offset: 4px;
+  border-radius: 6px;
+}
+
 .landing-header {
   align-items: center;
   backdrop-filter: blur(18px);
@@ -52,6 +60,12 @@ a {
   align-items: center;
   display: inline-flex;
   gap: 10px;
+  text-decoration: none;
+}
+
+.landing-brand:hover,
+.landing-brand:focus-visible {
+  opacity: 0.9;
 }
 
 .landing-brand .brand-mark {
@@ -63,11 +77,24 @@ a {
   width: 42px;
 }
 
-.landing-brand .brand-wordmark {
-  display: block;
-  height: auto;
-  max-width: 100%;
-  width: 150px;
+.brand-wordmark {
+  align-items: center;
+  display: inline-flex;
+  font-family: "Orbitron", "Rajdhani", sans-serif;
+  font-size: clamp(1.45rem, 2.4vw, 2.25rem);
+  font-style: italic;
+  font-weight: 900;
+  letter-spacing: 0;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.brand-true {
+  color: var(--brand-true);
+}
+
+.brand-hull {
+  color: var(--brand-hull);
 }
 
 .header-contact {
@@ -186,7 +213,6 @@ a {
 }
 
 .section-intro h2,
-.audience-section h2,
 .contact-band h2 {
   font-size: clamp(2rem, 5vw, 3.5rem);
   line-height: 1.08;
@@ -214,16 +240,18 @@ a {
 }
 
 .audience-section h2 {
-  font-size: clamp(1.8rem, 4.2vw, 3rem);
-  max-width: 980px;
+  font-size: clamp(1.65rem, 3.7vw, 2.6rem);
+  line-height: 1.1;
+  margin: 0;
+  max-width: 920px;
 }
 
-.audience-section > p:last-child {
+.audience-section > p {
   color: var(--muted);
   font-size: 1.08rem;
   line-height: 1.7;
   margin: 24px 0 0;
-  max-width: 720px;
+  max-width: 760px;
 }
 
 .contact-band {
@@ -260,6 +288,12 @@ a {
   padding-top: 26px;
 }
 
+.footer-brand-group {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
 .landing-footer .landing-brand {
   color: var(--deep);
 }
@@ -270,11 +304,18 @@ a {
 }
 
 .landing-footer .brand-wordmark {
-  width: 132px;
+  font-size: clamp(1.25rem, 2vw, 1.75rem);
 }
 
 .landing-footer p {
   margin: 0;
+}
+
+.footer-tagline,
+.footer-copyright {
+  color: var(--muted);
+  font-size: 0.92rem;
+  line-height: 1.5;
 }
 
 @media (max-width: 760px) {
@@ -293,7 +334,7 @@ a {
   }
 
   .landing-header .brand-wordmark {
-    width: 126px;
+    font-size: clamp(1.25rem, 7vw, 1.65rem);
   }
 
   .header-contact {
@@ -352,5 +393,9 @@ a {
   .landing-footer {
     gap: 16px;
     padding: 24px 20px 30px;
+  }
+
+  .footer-brand-group {
+    gap: 8px;
   }
 }
