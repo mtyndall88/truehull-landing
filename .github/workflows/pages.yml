@@ -32,7 +32,10 @@ jobs:
       - name: Upload landing page
         uses: actions/upload-pages-artifact@v3
         with:
-          path: .
+          # Publish the public/ directory only. Repo-root files (README,
+          # .claude/, assets/brand/, assets/images/, SITE-NOTES.md) are
+          # internal and are never deployed to gettruehull.com.
+          path: ./public
 
       - name: Deploy to GitHub Pages
         id: deployment

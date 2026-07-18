@@ -1,0 +1,558 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TrueHull — Know the risk before you buy</title>
+    <meta
+      name="description"
+      content="TrueHull turns a used-boat listing into an organized due-diligence checklist: risk flags, NOAA/NHC storm-exposure guidance, HIN format review, and the official records to check in all 50 states."
+    />
+    <meta name="theme-color" content="#06222e" />
+    <link rel="canonical" href="https://gettruehull.com/" />
+
+    <meta property="og:title" content="TrueHull — Know the risk before you buy" />
+    <meta
+      property="og:description"
+      content="Turn a boat listing into an organized due-diligence checklist: what to verify, what to ask, and where the official records live."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://gettruehull.com/" />
+    <meta
+      property="og:image"
+      content="https://gettruehull.com/assets/truehull-logo.webp"
+    />
+
+    <link rel="icon" href="assets/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16x16.png" />
+    <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
+
+    <link
+      rel="preload"
+      href="assets/fonts/inter-latin-var.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="assets/fonts/orbitron-900-latin.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="site-header">
+      <div class="container site-header__inner">
+        <a class="brand" href="#top" aria-label="TrueHull home">
+          <img class="brand__mark" src="assets/truehull-mark.png" alt="" width="40" height="40" />
+          <span class="brand__wordmark">
+            <span class="brand__true">True</span><span class="brand__hull">Hull</span>
+          </span>
+        </a>
+        <nav class="site-nav" aria-label="Primary">
+          <button
+            class="site-nav__toggle"
+            type="button"
+            aria-expanded="false"
+            aria-controls="primary-menu"
+          >
+            Menu
+          </button>
+          <div class="site-nav__panel" id="primary-menu">
+            <ul class="site-nav__list">
+              <li><a class="site-nav__link" href="#how">How it works</a></li>
+              <li><a class="site-nav__link" href="#storm">Storm data</a></li>
+              <li><a class="site-nav__link" href="#records">Official records</a></li>
+              <li><a class="site-nav__link" href="#about">About</a></li>
+              <li><a class="site-nav__link" href="#limits">Limits</a></li>
+            </ul>
+            <a class="btn btn--primary" href="#contact">Get in touch</a>
+          </div>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main">
+      <span id="top"></span>
+
+      <!-- ============ HERO: the product is the pitch ============ -->
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="container hero__inner">
+          <div class="hero__grid">
+            <div>
+              <p class="eyebrow">Pre-purchase due diligence for boat buyers</p>
+              <h1 id="hero-title">Know the risk before you buy.</h1>
+              <p class="lede">
+                Paste a listing, or type the details in, and TrueHull returns an organized
+                checklist: what the details flag, which official records to pull for
+                your state, and exactly what to ask the seller before money moves.
+              </p>
+              <div class="actions">
+                <a class="btn btn--primary" href="#how">See how it works</a>
+                <a class="btn btn--on-dark" href="#contact">Get in touch</a>
+              </div>
+              <p class="hero__note">
+                TrueHull organizes your research. It does not access or verify official
+                records, and a report with few flags is never an all-clear.
+              </p>
+            </div>
+
+            <!-- Report preview -->
+            <div class="report-shot">
+              <div class="report-shot__bar">
+                <span>Buyer risk report</span>
+                <span class="sample-flag">Sample: illustrative vessel</span>
+              </div>
+              <div class="report-shot__body">
+                <div>
+                  <div class="rpt-block__head">
+                    <span class="rpt-block__title">Overall risk</span>
+                    <span class="risk-pill risk-pill--moderate">Moderate</span>
+                  </div>
+                  <div class="score">
+                    <span class="score__value">46</span>
+                    <span class="score__of">/ 100 risk indicator</span>
+                  </div>
+                  <div class="meter" role="img" aria-label="Risk indicator 46 of 100, moderate">
+                    <span class="meter__needle" style="left: 46%"></span>
+                  </div>
+                  <div class="meter__scale">
+                    <span>Low 0</span><span>Moderate 30</span><span>High 60+</span>
+                  </div>
+                  <p class="rpt-note">
+                    A rule-based indicator built only from the details you submit.
+                    It is not validated, statistical or predictive, it does not
+                    measure the condition of the boat, and a lower number does not
+                    mean a sound boat.
+                  </p>
+                </div>
+
+                <div class="rpt-block">
+                  <div class="rpt-block__head">
+                    <span class="rpt-block__title">Storm exposure</span>
+                    <span class="risk-pill risk-pill--moderate">Elevated</span>
+                  </div>
+                  <div class="storm-row">
+                    <span>
+                      <span class="storm-row__name">Hurricane Ian</span>
+                      <span class="storm-row__meta">Cat 4 at closest approach · 28 Sep 2022</span>
+                    </span>
+                    <span class="storm-row__dist">~16 mi</span>
+                  </div>
+                  <div class="storm-row">
+                    <span>
+                      <span class="storm-row__name">Hurricane Irma</span>
+                      <span class="storm-row__meta">Cat 1 at closest approach · 11 Sep 2017</span>
+                    </span>
+                    <span class="storm-row__dist">~24 mi</span>
+                  </div>
+                </div>
+
+                <div class="rpt-block">
+                  <span class="rpt-block__title">Risk flags</span>
+                  <ul class="rpt-list">
+                    <li>Seller notes include risk terms: soft deck or hull spots.</li>
+                    <li>Regional storm exposure match near the submitted Florida county.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ HOW IT WORKS ============ -->
+      <section id="how" class="section" aria-labelledby="how-title">
+        <div class="container">
+          <p class="eyebrow">How it works</p>
+          <h2 id="how-title">Three steps, one document you can print.</h2>
+          <div class="steps section__body">
+            <div class="step">
+              <h3>Paste the listing</h3>
+              <p>
+                Drop in listing text and TrueHull pulls out year, make, model, length,
+                type, state, HIN, price and engine setup. Or type the details yourself.
+              </p>
+            </div>
+            <div class="step">
+              <h3>TrueHull reviews and flags</h3>
+              <p>
+                Risk rules read the details you gave (engine hours, seller-note
+                language, HIN format, and county storm history in Florida) and mark
+                what deserves a question.
+              </p>
+            </div>
+            <div class="step">
+              <h3>Work the checklist</h3>
+              <p>
+                You get the official records to pull for your state, the questions to
+                ask the seller, and the spots to inspect. Print it and take it to the boat.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ STORM DATA ============ -->
+      <section id="storm" class="section section--foam" aria-labelledby="storm-title">
+        <div class="container">
+          <p class="eyebrow">Where the guidance comes from</p>
+          <h2 id="storm-title">Real hurricane tracks, not a vague warning.</h2>
+          <p class="lede section__body">
+            For Florida counties, TrueHull compares the county's representative point
+            against NOAA/NHC Atlantic storm-track data and lists the named storms that
+            passed nearby, with dates and approximate distances you can ask about.
+          </p>
+
+          <div class="grid grid--2 section__body">
+            <div class="report-shot">
+              <div class="report-shot__bar">
+                <span>Storm exposure · Lee County, FL</span>
+                <span class="sample-flag">Sample</span>
+              </div>
+              <div class="report-shot__body">
+                <div class="rpt-block">
+                  <div class="rpt-block__head">
+                    <span class="rpt-block__title">Matched storms · 10-year lookback</span>
+                    <span class="risk-pill risk-pill--moderate">Elevated</span>
+                  </div>
+                  <div class="storm-row">
+                    <span><span class="storm-row__name">IAN</span>
+                      <span class="storm-row__meta">Cat 4 · 140 kt at closest approach · 28 Sep 2022</span></span>
+                    <span class="storm-row__dist">~16 mi</span>
+                  </div>
+                  <div class="storm-row">
+                    <span><span class="storm-row__name">IRMA</span>
+                      <span class="storm-row__meta">Cat 1 · 80 kt at closest approach · 11 Sep 2017</span></span>
+                    <span class="storm-row__dist">~24 mi</span>
+                  </div>
+                  <div class="storm-row">
+                    <span><span class="storm-row__name">SALLY</span>
+                      <span class="storm-row__meta">Tropical storm · 50 kt at closest approach · 13 Sep 2020</span></span>
+                    <span class="storm-row__dist">~50 mi</span>
+                  </div>
+                  <div class="source-stamp">
+                    <span>Source: <code>NOAA/NHC HURDAT2</code></span>
+                    <span>Matched locally · county representative point</span>
+                    <span>Intensity shown is the storm's strength at its closest
+                      approach, not its lifetime peak.</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="stack--l">
+              <div>
+                <h3>Questions it hands you</h3>
+                <ul class="q-list">
+                  <li>Where was the vessel stored during those storm dates?</li>
+                  <li>Was it hauled out, trailered, or left in the water?</li>
+                  <li>Any water intrusion, repairs, or insurance claims since?</li>
+                </ul>
+              </div>
+              <div class="trust-band">
+                <span class="trust-band__label">What this does not tell you</span>
+                <p>
+                  This identifies <strong>possible regional exposure</strong> near the
+                  submitted Florida county. It does not verify where the vessel was
+                  during a storm or whether it was damaged, and it is not an insurance,
+                  title, salvage, registration, USCG or law-enforcement record check.
+                  County-level matching is Florida-only; other states get state-level
+                  storm guidance.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ OFFICIAL RECORDS ============ -->
+      <section id="records" class="section" aria-labelledby="records-title">
+        <div class="container">
+          <p class="eyebrow">The part buyers get stuck on</p>
+          <h2 id="records-title">Boat records are state-by-state. We route you.</h2>
+          <p class="lede section__body">
+            Every report lists the official checks for your state: title, registration,
+            liens and stolen-boat searches, with the agency link and the identifiers each
+            one needs. All 50 states, official sources only.
+          </p>
+
+          <div class="grid grid--2 section__body">
+            <div class="check-card">
+              <span class="check-card__title">Florida Title and Registration Manual Check</span>
+              <span class="check-card__agency">State agency · official source</span>
+              <span class="check-card__ids">Uses: HIN · registration no.</span>
+            </div>
+            <div class="check-card">
+              <span class="check-card__title">Florida Seller, Ownership, and Lien Follow-Up</span>
+              <span class="check-card__agency">State agency · official source</span>
+              <span class="check-card__ids">Uses: HIN · seller details</span>
+            </div>
+            <div class="check-card">
+              <span class="check-card__title">Florida State Stolen Boat Search</span>
+              <span class="check-card__agency">State law enforcement</span>
+              <span class="check-card__ids">Uses: HIN</span>
+            </div>
+            <div class="check-card">
+              <span class="check-card__title">FBI NCIC Stolen Boat File</span>
+              <span class="check-card__agency">Federal · law-enforcement access only</span>
+              <span class="check-card__ids">How to request a check</span>
+            </div>
+            <div class="check-card">
+              <span class="check-card__title">NICB VINCheck</span>
+              <span class="check-card__agency">Federal / non-profit · public lookup</span>
+              <span class="check-card__ids">Uses: HIN</span>
+            </div>
+            <div class="check-card">
+              <span class="check-card__title">USCG PSIX / NVDC</span>
+              <span class="check-card__agency">Federal · when a documentation number is given</span>
+              <span class="check-card__ids">Uses: documentation no.</span>
+            </div>
+          </div>
+
+          <div class="trust-band section__band">
+            <span class="trust-band__label">How to read this</span>
+            <p>
+              TrueHull organizes these checks and links you to the agencies. It does not
+              query, retrieve, store, or verify official results on your behalf, and a
+              missing record never proves a clean history.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ HIN ============ -->
+      <section class="section section--foam" aria-labelledby="hin-title">
+        <div class="container">
+          <p class="eyebrow">Hull identification</p>
+          <h2 id="hin-title">We check the format, then tell you what to do with it.</h2>
+          <div class="grid grid--2 section__body">
+            <div class="report-shot">
+              <div class="report-shot__bar">
+                <span>HIN format review</span>
+                <span class="sample-flag">Sample</span>
+              </div>
+              <div class="report-shot__body">
+                <div class="hin">
+                  <span class="hin__seg">
+                    <span class="hin__chars">XYZ</span>
+                    <span class="hin__label">Manufacturer</span>
+                  </span>
+                  <span class="hin__seg">
+                    <span class="hin__chars">45678</span>
+                    <span class="hin__label">Serial</span>
+                  </span>
+                  <span class="hin__seg">
+                    <span class="hin__chars">L516</span>
+                    <span class="hin__label">Date / model yr</span>
+                  </span>
+                </div>
+                <div class="rpt-block">
+                  <span class="rpt-block__title">Result</span>
+                  <p class="rpt-list">
+                    12-character U.S. format check passed. Confirm these characters
+                    match the transom plate <em>and</em> the paperwork before you buy.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="prose">
+              <p>
+                A decoder tells you what the characters mean. TrueHull reviews the
+                format and structure, then points you to where the number has to be
+                confirmed: on the hull, on the title, and against the official records
+                for your state.
+              </p>
+              <p>
+                <strong>This is a format review only.</strong> TrueHull does not decode
+                the HIN against any official manufacturer or government database.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ ABOUT ============ -->
+      <section id="about" class="section" aria-labelledby="about-title">
+        <div class="container">
+          <p class="eyebrow">About</p>
+          <h2 id="about-title">Why TrueHull exists</h2>
+          <div class="grid grid--2 section__body">
+            <div class="prose">
+              <p>
+                Buying a used boat means trusting a stranger's description of
+                something most people cannot easily inspect. The paperwork is
+                fragmented: titles and registration sit with individual state
+                agencies, theft records sit with law enforcement, and storm history
+                sits in federal weather data. Each one lives somewhere different,
+                and none of it is obvious to a first-time buyer.
+              </p>
+              <p>
+                TrueHull was built to organize that process. It takes the listing
+                details you already have and turns them into a checklist: what the
+                details flag, which agency handles your state, what to ask the
+                seller, and what to look at when you stand in front of the boat.
+              </p>
+              <p>
+                We are deliberate about what the product will not claim. The
+                sections that make a data claim state their own limits, and the
+                report tells you plainly what it cannot verify. A tool that overstates itself is worse than
+                no tool at all when the purchase is this large.
+              </p>
+            </div>
+            <div class="stack--l">
+              <div class="card">
+                <h3>Where it stands today</h3>
+                <p>
+                  TrueHull is early-stage and in active development. The report
+                  engine, county-level storm matching for Florida, 50-state record
+                  routing and HIN format review all work today. The public buyer experience is being
+                  finished now.
+                </p>
+              </div>
+              <div class="card">
+                <h3>Who it is for</h3>
+                <p>
+                  First-time buyers who want a guided process, remote buyers
+                  evaluating boats in another state, and organized researchers who
+                  want one place to keep it all. Brokers, dealers and surveyors are
+                  welcome too: TrueHull routes buyers toward professional
+                  inspection, never away from it.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ LIMITS ============ -->
+      <section id="limits" class="section section--ink" aria-labelledby="limits-title">
+        <div class="container">
+          <p class="eyebrow eyebrow--on-dark">Honesty as architecture</p>
+          <h2 id="limits-title">We tell you what no report can verify.</h2>
+          <p class="lede section__body">
+            Sections that make a data claim state their own limits, and each report carries a confidence
+            assessment showing what supports it and how to improve it.
+          </p>
+
+          <div class="stats section__body">
+            <div class="stat">
+              <div class="stat__value">50</div>
+              <p class="stat__label">States with official-record routing, official sources only.</p>
+            </div>
+            <div class="stat">
+              <div class="stat__value">10 yr</div>
+              <p class="stat__label">NOAA/NHC storm-track lookback for Florida counties.</p>
+            </div>
+            <div class="stat">
+              <div class="stat__value">13</div>
+              <p class="stat__label">Sections in the buyer report, with limits stated on every
+              section that makes a data claim.</p>
+            </div>
+          </div>
+
+          <div class="trust-band section__band">
+            <span class="trust-band__label">What TrueHull does not verify</span>
+            <p>
+              TrueHull does not access or verify official records. A report does not
+              confirm ownership, title status, liens, theft or salvage history,
+              insurance claims, accident history, registration, or USCG documentation
+              status, and it does not verify where a vessel was during a storm or
+              whether it was damaged. Nothing here replaces a marine survey, a sea
+              trial, or a title and lien search. Every report recommends them.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ SAMPLE / CTA ============ -->
+      <section id="contact" class="section" aria-labelledby="contact-title">
+        <div class="container">
+          <p class="eyebrow">Get in touch</p>
+          <h2 id="contact-title">Building the first version of TrueHull</h2>
+          <div class="prose section__body">
+            <p>
+              The buyer experience is in active development. If you're getting ready to
+              buy a used boat, or you work in the marine industry and want to talk, we'd
+              like to hear from you. Partnership and business conversations are welcome.
+            </p>
+          </div>
+          <div class="actions">
+            <a class="btn btn--primary" href="mailto:mark@gettruehull.com?subject=TrueHull%20Inquiry"
+              >Email the team</a
+            >
+            <a class="btn btn--secondary" href="mailto:support@gettruehull.com?subject=TrueHull%20Support"
+              >General support</a
+            >
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <div class="site-footer__top">
+          <div>
+            <a class="brand" href="#top" aria-label="TrueHull home">
+              <img class="brand__mark" src="assets/truehull-mark.png" alt="" width="40" height="40" />
+              <span class="brand__wordmark">
+                <span class="brand__true">True</span><span class="brand__hull">Hull</span>
+              </span>
+            </a>
+            <p class="site-footer__tagline">Know the risk before you buy.</p>
+          </div>
+          <nav class="site-footer__nav" aria-label="Footer">
+            <div class="site-footer__col">
+              <h2>Explore</h2>
+              <ul>
+                <li><a href="#how">How it works</a></li>
+                <li><a href="#storm">Storm data</a></li>
+                <li><a href="#records">Official records</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#limits">Limits</a></li>
+              </ul>
+            </div>
+            <div class="site-footer__col">
+              <h2>Contact</h2>
+              <ul>
+                <li><a href="mailto:mark@gettruehull.com?subject=TrueHull%20Inquiry">mark@gettruehull.com</a></li>
+                <li><a href="mailto:support@gettruehull.com?subject=TrueHull%20Support">support@gettruehull.com</a></li>
+              </ul>
+            </div>
+          </nav>
+        </div>
+        <div class="site-footer__bottom">
+          <p>&copy; 2026 TrueHull. All rights reserved.</p>
+          <p>Sample report figures use illustrative vessel data.</p>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      // Progressive enhancement: without JS the menu is simply visible.
+      document.documentElement.classList.add('js');
+      (function () {
+        var nav = document.querySelector('.site-nav');
+        var btn = nav && nav.querySelector('.site-nav__toggle');
+        if (!nav || !btn) return;
+        btn.addEventListener('click', function () {
+          var open = nav.getAttribute('data-open') === 'true';
+          nav.setAttribute('data-open', String(!open));
+          btn.setAttribute('aria-expanded', String(!open));
+        });
+        nav.addEventListener('click', function (e) {
+          if (e.target.closest('a')) {
+            nav.setAttribute('data-open', 'false');
+            btn.setAttribute('aria-expanded', 'false');
+          }
+        });
+      })();
+    </script>
+  </body>
+</html>

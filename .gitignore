@@ -4,3 +4,10 @@ Thumbs.db
 node_modules/
 dist/
 build/
+
+# Local editor/agent settings — never track or deploy
+.claude/
+
+# Internal build notes. This repo is public; SITE-NOTES.md documents app
+# internals and unresolved review findings, so it stays local only.
+SITE-NOTES.md

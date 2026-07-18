@@ -1,0 +1,1202 @@
+/* ==========================================================================
+   TrueHull — Canonical design system
+   --------------------------------------------------------------------------
+   "Premium Marine Intelligence" foundation stylesheet.
+
+   This is the single source of truth for the marketing site's tokens and
+   shared components, authored so the TrueHull app can later adopt the same
+   token set (see SITE-NOTES.md at the repo root for the adoption plan).
+
+   Section map:
+     1. Fonts (self-hosted, no third-party requests)
+     2. Design tokens (:root)
+     3. Reset + base elements
+     4. Motion + accessibility primitives
+     5. Layout primitives (container, section, prose, grid)
+     6. Typographic helpers (eyebrow, lede, measure)
+     7. Components — skip link, header + nav, brand lockup,
+        buttons, footer, cards, trust band
+     8. Print baseline
+
+   Colour contrast: body/UI text is verified >= 5.5:1 on its surface.
+   The gold accent is ~2.6:1 on white, so it is used ONLY on dark surfaces
+   and as CTA/emphasis fills (with dark ink text), never as text on light.
+   ========================================================================== */
+
+/* ==========================================================================
+   1. FONTS — self-hosted latin subsets (see public/assets/fonts/)
+   ========================================================================== */
+
+/* Inter: one variable file covers weights 400–800. */
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 400 800;
+  font-display: swap;
+  src: url("assets/fonts/inter-latin-var.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* Orbitron 900 — brand wordmark only. Italic is synthesised (Orbitron ships
+   no true italic), matching the existing lockup treatment. */
+@font-face {
+  font-family: "Orbitron";
+  font-style: normal;
+  font-weight: 900;
+  font-display: swap;
+  src: url("assets/fonts/orbitron-900-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* ==========================================================================
+   2. DESIGN TOKENS
+   ========================================================================== */
+
+:root {
+  /* --- Brand anchors (fixed across app + marketing) --- */
+  --brand-navy: #062b63; /* the "True" in the wordmark */
+  --brand-teal: #0796a8; /* the "Hull" in the wordmark */
+
+  /* --- Marine ink + water scale (dark -> mid) --- */
+  --ink-900: #06222e; /* darkest — hero / inverted surfaces */
+  --ink-800: #0b2a38;
+  --ink-700: #102432; /* primary text on light (15.9:1 on white) */
+  --deep: #062f3e; /* deep marine slate */
+  --water-800: #075d70; /* water-strong; eyebrow/label on light (7.5:1) */
+  --water-700: #0d7284; /* primary interactive / links (5.6:1 on white) */
+  --water-500: #0796a8; /* brand teal — accents on dark */
+
+  /* --- Neutrals / surfaces --- */
+  --surface: #ffffff;
+  --foam: #f5fafb; /* airy content section background */
+  --sky: #e9f6f8; /* tinted chip / hover surface */
+  --line: #d7e5ea; /* hairline borders */
+  --line-strong: #c3d6dd;
+  --muted: #4d6670; /* secondary text on light (~6.1:1 on white) */
+
+  /* --- Foreground scale for dark surfaces --- */
+  --on-dark: #eaf5f7; /* primary text on ink surfaces */
+  --muted-on-dark: #cbe0e6; /* secondary text on dark surfaces */
+  --quiet-on-dark: #9fc0c8; /* footer chrome / meta on dark */
+  --link-on-dark: #dcecef; /* links on dark surfaces */
+  --header-bg: rgba(247, 252, 253, 0.9); /* translucent sticky header */
+
+  /* Inverted wordmark (the brand navy is unreadable on ink). */
+  --brand-navy-on-dark: #a9c4e6;
+  --brand-teal-on-dark: #37c0d4;
+
+  /* --- Gold accent (used sparingly; dark surfaces + CTA only) --- */
+  --accent: #d19426; /* CTA fill / emphasis on dark */
+  --accent-strong: #b87a15; /* hover */
+  --accent-ink: #241a06; /* text on gold (6.5:1) */
+
+  /* --- Semantic risk vocabulary (shared with the app's report UI) --- */
+  --danger: #b43b31;
+  --warning: #b87511;
+  --success: #25735d;
+  --risk-low-bg: #dff2ea;
+  --risk-low-ink: #1c5b48;
+  --risk-moderate-bg: #fff0d6;
+  --risk-moderate-ink: #7a4f0c;
+  --risk-high-bg: #ffe2df;
+  --risk-high-ink: #8a2d24;
+
+  /* --- Elevation --- */
+  --shadow: 0 18px 48px rgba(6, 47, 62, 0.12);
+  --shadow-soft: 0 10px 30px rgba(6, 47, 62, 0.08);
+
+  /* --- Typography --- */
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system,
+    BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+  --font-display: "Orbitron", "Rajdhani", var(--font-sans);
+
+  /* Fluid modular scale (~1.2 mobile -> ~1.25 desktop) */
+  --step--1: clamp(0.82rem, 0.79rem + 0.14vw, 0.9rem);
+  --step-0: clamp(1rem, 0.96rem + 0.2vw, 1.1rem);
+  --step-1: clamp(1.2rem, 1.13rem + 0.35vw, 1.4rem);
+  --step-2: clamp(1.44rem, 1.32rem + 0.6vw, 1.85rem);
+  --step-3: clamp(1.72rem, 1.53rem + 0.95vw, 2.4rem);
+  --step-4: clamp(2.05rem, 1.75rem + 1.5vw, 3.1rem);
+  --step-5: clamp(2.45rem, 2rem + 2.25vw, 4rem);
+
+  --lh-tight: 1.1;
+  --lh-snug: 1.3;
+  --lh-body: 1.65;
+  --measure: 65ch; /* comfortable prose line length */
+
+  /* --- Spacing scale --- */
+  --space-3xs: 0.25rem;
+  --space-2xs: 0.5rem;
+  --space-xs: 0.75rem;
+  --space-s: 1rem;
+  --space-m: 1.5rem;
+  --space-l: 2rem;
+  --space-xl: 3rem;
+  --space-2xl: 4rem;
+  --space-3xl: clamp(4rem, 3rem + 5vw, 7rem); /* section rhythm */
+
+  /* --- Radii --- */
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-pill: 999px;
+
+  /* --- Layout --- */
+  --container: 1180px;
+  --container-narrow: 760px;
+  --gutter: clamp(1.25rem, 5vw, 4rem);
+
+  /* --- Focus --- */
+  --focus-ring: 3px solid rgba(7, 150, 168, 0.65);
+  --focus-offset: 3px;
+}
+
+/* ==========================================================================
+   3. RESET + BASE
+   ========================================================================== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  /* Offset in-page anchors so the sticky header doesn't cover targets. */
+  scroll-padding-top: 5rem;
+}
+
+body {
+  background: var(--surface);
+  color: var(--ink-700);
+  font-family: var(--font-sans);
+  font-size: var(--step-0);
+  line-height: var(--lh-body);
+  font-synthesis: none; /* prefer true weights; wordmark opts back in below */
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+img,
+svg,
+picture,
+video {
+  display: block;
+  max-width: 100%;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  line-height: var(--lh-tight);
+  font-weight: 800;
+  letter-spacing: -0.015em;
+  color: var(--ink-700);
+  text-wrap: balance;
+}
+
+h1 {
+  font-size: var(--step-5);
+}
+h2 {
+  font-size: var(--step-4);
+}
+h3 {
+  font-size: var(--step-2);
+  letter-spacing: -0.01em;
+}
+h4 {
+  font-size: var(--step-1);
+}
+
+p {
+  text-wrap: pretty;
+}
+
+a {
+  color: var(--water-700);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+ul,
+ol {
+  padding-left: 1.15em;
+}
+
+small {
+  font-size: var(--step--1);
+}
+
+strong {
+  font-weight: 700;
+}
+
+hr {
+  border: 0;
+  border-top: 1px solid var(--line);
+}
+
+:target {
+  scroll-margin-top: 5rem;
+}
+
+/* ==========================================================================
+   4. MOTION + ACCESSIBILITY PRIMITIVES
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Global focus treatment — visible everywhere, keyboard users only. */
+:focus-visible {
+  outline: var(--focus-ring);
+  outline-offset: var(--focus-offset);
+  border-radius: var(--radius-xs);
+}
+
+/* Screen-reader-only utility. */
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ==========================================================================
+   5. LAYOUT PRIMITIVES
+   ========================================================================== */
+
+.container {
+  width: 100%;
+  max-width: var(--container);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.container--narrow {
+  max-width: var(--container-narrow);
+}
+
+/* Vertical section rhythm. */
+.section {
+  padding-block: var(--space-3xl);
+}
+
+.section--tight {
+  padding-block: var(--space-2xl);
+}
+
+.section--foam {
+  background: var(--foam);
+}
+
+.section--ink {
+  background: var(--ink-900);
+  color: var(--on-dark);
+}
+
+/* Headings invert on dark surfaces (the base rule sets dark ink). */
+.section--ink h1,
+.section--ink h2,
+.section--ink h3,
+.section--ink h4 {
+  color: #fff;
+}
+
+/* Muted list used for seller questions etc. */
+.q-list {
+  color: var(--muted);
+  margin-top: var(--space-2xs);
+  display: grid;
+  gap: 0.4rem;
+}
+
+/* Prose blocks stay within a readable measure. */
+.prose {
+  max-width: var(--measure);
+}
+
+.prose > * + * {
+  margin-top: var(--space-s);
+}
+
+/* Simple auto-fit grid for card rows. */
+.grid {
+  display: grid;
+  gap: var(--space-l);
+}
+
+@media (min-width: 640px) {
+  .grid--2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 900px) {
+  .grid--3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Vertical stack utility. */
+.stack > * + * {
+  margin-top: var(--space-s);
+}
+.stack--l > * + * {
+  margin-top: var(--space-l);
+}
+
+/* Section rhythm — the eyebrow › heading › body › band › actions cadence
+   lives here, not in per-page inline styles, so every page inherits the
+   same vertical music. */
+.section__body {
+  margin-top: var(--space-m);
+}
+
+.section__band {
+  margin-top: var(--space-xl);
+}
+
+/* Shared action row (hero + section CTAs). */
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-s);
+  margin-top: var(--space-l);
+}
+
+/* ==========================================================================
+   6. TYPOGRAPHIC HELPERS
+   ========================================================================== */
+
+/* Eyebrow / kicker. On light surfaces it is marine-teal (7.5:1); the gold
+   accent appears only as the leading tick so colour is never the sole
+   signal and contrast always passes. */
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6em;
+  margin: 0 0 var(--space-s);
+  font-size: var(--step--1);
+  font-weight: 700;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--water-800);
+}
+
+.eyebrow::before {
+  content: "";
+  width: 1.6em;
+  height: 2px;
+  background: var(--accent);
+  border-radius: var(--radius-pill);
+}
+
+/* On dark surfaces the eyebrow text itself can carry the gold accent. */
+.section--ink .eyebrow,
+.hero .eyebrow,
+.eyebrow--on-dark {
+  color: var(--accent);
+}
+
+.lede {
+  font-size: var(--step-1);
+  line-height: var(--lh-snug);
+  color: var(--muted);
+  max-width: var(--measure);
+}
+
+.section--ink .lede,
+.hero .lede {
+  color: var(--muted-on-dark);
+}
+
+/* ==========================================================================
+   7. COMPONENTS
+   ========================================================================== */
+
+/* --- 7.1 Skip link --- */
+.skip-link {
+  position: absolute;
+  left: var(--space-s);
+  top: var(--space-s);
+  z-index: 100;
+  padding: 0.7rem 1.1rem;
+  background: var(--ink-900);
+  color: #fff;
+  font-weight: 700;
+  border-radius: var(--radius-sm);
+  transform: translateY(-150%);
+  transition: transform 0.15s ease;
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+  text-decoration: none;
+}
+
+/* --- 7.2 Site header --- */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: var(--header-bg);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border-bottom: 1px solid var(--line);
+}
+
+.site-header__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-m);
+  min-height: 64px;
+  padding-block: 0.6rem;
+}
+
+/* --- 7.3 Brand lockup --- */
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--deep);
+  flex: 0 0 auto;
+}
+
+.brand:hover {
+  text-decoration: none;
+  opacity: 0.92;
+}
+
+.brand__mark {
+  width: 40px;
+  height: 40px;
+  border: 1px solid rgba(7, 93, 112, 0.18);
+  border-radius: var(--radius-md);
+  flex: 0 0 auto;
+}
+
+.brand__wordmark {
+  display: inline-flex;
+  font-family: var(--font-display);
+  font-style: italic; /* synthesised oblique — matches app lockup */
+  font-weight: 900;
+  font-synthesis: style; /* allow the faux-italic slant */
+  line-height: 1;
+  white-space: nowrap;
+  font-size: clamp(1.4rem, 1.1rem + 1.4vw, 2rem);
+  letter-spacing: 0;
+}
+
+.brand__true {
+  color: var(--brand-navy);
+}
+.brand__hull {
+  color: var(--brand-teal);
+}
+
+/* Inverted lockup for dark surfaces (e.g. footer on ink). */
+.brand--on-dark {
+  color: #fff;
+}
+.brand--on-dark .brand__true {
+  color: var(--brand-navy-on-dark);
+}
+.brand--on-dark .brand__hull {
+  color: var(--brand-teal-on-dark);
+}
+
+/* --- 7.4 Navigation ---
+   Real <button> toggle, not a <details> disclosure: modern Chrome hides
+   details content via content-visibility on ::details-content, which a
+   display override cannot defeat. Progressive enhancement instead —
+   without JS the menu is simply visible; script.js collapses it on small
+   screens and wires the toggle. */
+.site-nav {
+  margin: 0;
+}
+
+.site-nav__toggle {
+  display: none; /* revealed by JS on small screens only */
+  align-items: center;
+  gap: 0.5em;
+  min-height: 44px;
+  padding: 0.55rem 0.9rem;
+  font: inherit;
+  font-weight: 700;
+  color: var(--deep);
+  background: var(--sky);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+}
+
+.site-nav__panel {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-2xs);
+}
+
+.site-nav__list {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-2xs);
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.site-nav__link {
+  display: inline-block;
+  padding: 0.5rem 0.8rem;
+  border-radius: var(--radius-pill);
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--deep);
+}
+
+.site-nav__link:hover {
+  background: var(--sky);
+  text-decoration: none;
+}
+
+.site-nav__link[aria-current="page"] {
+  color: var(--water-800);
+  background: var(--sky);
+}
+
+/* Small screens, JS active: collapse behind the toggle. */
+@media (max-width: 899px) {
+  .js .site-nav__toggle {
+    display: inline-flex;
+  }
+  .js .site-nav__panel {
+    display: none;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 100%;
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-2xs);
+    padding: var(--space-s) var(--gutter) var(--space-l);
+    background: var(--surface);
+    border-bottom: 1px solid var(--line);
+    box-shadow: var(--shadow-soft);
+  }
+  .js .site-nav[data-open="true"] .site-nav__panel {
+    display: flex;
+  }
+  .site-nav__list {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .site-nav__link {
+    padding-block: 0.7rem;
+  }
+}
+
+/* --- 7.5 Buttons --- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+  min-height: 48px;
+  padding: 0.7rem 1.25rem;
+  border: 2px solid transparent;
+  border-radius: var(--radius-sm);
+  font: inherit;
+  font-weight: 800;
+  line-height: 1.1;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease,
+    color 0.15s ease, transform 0.15s ease;
+}
+
+.btn:hover {
+  text-decoration: none;
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+/* Primary — gold fill, dark ink text (6.5:1). */
+.btn--primary {
+  background: var(--accent);
+  color: var(--accent-ink);
+  border-color: var(--accent);
+}
+.btn--primary:hover {
+  background: var(--accent-strong);
+  border-color: var(--accent-strong);
+}
+
+/* Secondary — marine outline for light surfaces. */
+.btn--secondary {
+  background: transparent;
+  color: var(--water-800);
+  border-color: var(--line-strong);
+}
+.btn--secondary:hover {
+  background: var(--sky);
+  border-color: var(--water-700);
+}
+
+/* On dark surfaces. */
+.btn--on-dark {
+  background: transparent;
+  color: var(--on-dark);
+  border-color: rgba(234, 245, 247, 0.5);
+}
+.btn--on-dark:hover {
+  background: rgba(234, 245, 247, 0.12);
+  border-color: var(--on-dark);
+}
+
+.btn--block {
+  width: 100%;
+}
+
+/* --- 7.6 Footer ---
+   Light surface so the brand lockup uses the same navy/teal as the header
+   (the inverted variant was a different colour, which read as inconsistent). */
+.site-footer {
+  background: var(--foam);
+  color: var(--muted);
+  border-top: 1px solid var(--line);
+}
+
+.site-footer a {
+  color: var(--water-700);
+}
+
+.site-footer__top {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--space-xl);
+  padding-block: var(--space-2xl) var(--space-l);
+}
+
+.site-footer__tagline {
+  margin-top: var(--space-s);
+  color: var(--muted);
+  max-width: 34ch;
+}
+
+.site-footer__nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-m) var(--space-xl);
+}
+
+.site-footer__col h2 {
+  font-size: var(--step--1);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--water-800);
+  margin-bottom: var(--space-xs);
+}
+
+.site-footer__col ul {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: 0.55rem;
+  font-size: 0.95rem;
+}
+
+.site-footer__bottom {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-s) var(--space-m);
+  justify-content: space-between;
+  align-items: center;
+  padding-block: var(--space-m) var(--space-l);
+  border-top: 1px solid var(--line);
+  font-size: var(--step--1);
+  color: var(--muted);
+}
+
+/* --- 7.7 Card (base for report-preview + benefit modules) --- */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: var(--space-l);
+  box-shadow: var(--shadow-soft);
+}
+
+.card h3 {
+  margin-bottom: var(--space-2xs);
+}
+
+.card p {
+  color: var(--muted);
+}
+
+/* --- 7.8 Trust band — limitations presented as a first-class component,
+   never fine print (§6.3). Quiet, legible, marine-tinted. --- */
+.trust-band {
+  background: var(--sky);
+  border-left: 4px solid var(--water-700);
+  border-radius: var(--radius-md);
+  padding: var(--space-l);
+  color: var(--ink-700);
+  max-width: var(--measure); /* the component owns its own measure */
+}
+
+.trust-band__label {
+  display: block;
+  font-size: var(--step--1);
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--water-800);
+  margin-bottom: var(--space-2xs);
+}
+
+/* --- 7.9 Hero (interim treatment; full art direction lands on feat/home) ---
+   Token-driven dark hero with a soft marine glow and a faint depth-line
+   motif drawn purely in CSS — no stretched logo, no imagery, no motion. */
+.hero {
+  position: relative;
+  background: radial-gradient(
+      120% 120% at 85% -10%,
+      rgba(7, 150, 168, 0.22),
+      transparent 55%
+    ),
+    radial-gradient(90% 90% at 0% 110%, rgba(6, 43, 99, 0.4), transparent 60%),
+    var(--ink-900);
+  color: var(--on-dark);
+  overflow: hidden;
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: repeating-linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.045) 0 1px,
+    transparent 1px 64px
+  );
+  -webkit-mask-image: linear-gradient(180deg, transparent, #000 45%);
+  mask-image: linear-gradient(180deg, transparent, #000 45%);
+  pointer-events: none;
+}
+
+.hero__inner {
+  position: relative;
+  z-index: 1;
+  padding-block: clamp(4rem, 3rem + 6vw, 8rem);
+}
+
+.hero h1 {
+  color: #fff;
+  margin-block: var(--space-s) var(--space-m);
+  max-width: 16ch;
+}
+
+.hero__note {
+  margin-top: var(--space-m);
+  color: var(--muted-on-dark);
+  font-size: var(--step--1);
+  max-width: 52ch;
+}
+
+
+/* ==========================================================================
+   9. PRODUCT PREVIEW COMPONENTS
+   --------------------------------------------------------------------------
+   Stylised recreations of the app's report vocabulary (§6.3), used to show
+   the product itself as the page's hero imagery. All data rendered through
+   these is illustrative and must carry a visible sample label (§1.6).
+   ========================================================================== */
+
+/* --- 9.1 Report frame — the "document" the buyer receives --- */
+.report-shot {
+  background: var(--surface);
+  /* Re-assert dark text: the frame is white but often sits on a dark
+     surface (hero), and must not inherit the on-dark foreground. */
+  color: var(--ink-700);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  text-align: left;
+}
+
+/* Limitation note sitting directly beneath a capability inside a preview.
+   Deliberately legible, not fine print. */
+.rpt-note {
+  margin-top: var(--space-2xs);
+  font-size: 0.78rem;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+/* Lists rendered inside a report preview. */
+.rpt-list {
+  margin: 0.4rem 0 0;
+  padding-left: 1.1em;
+  font-size: 0.88rem;
+  display: grid;
+  gap: 0.35rem;
+}
+
+.report-shot__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-2xs);
+  padding: 0.7rem var(--space-m);
+  background: var(--ink-800);
+  color: var(--on-dark);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* Sample-data flag — always visible on any preview. */
+.sample-flag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45em;
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+  background: rgba(209, 148, 38, 0.18);
+  color: #f0d9a8;
+  font-size: 0.7rem;
+  letter-spacing: 0.05em;
+}
+
+.report-shot__body {
+  padding: var(--space-m);
+  display: grid;
+  gap: var(--space-m);
+}
+
+/* --- 9.2 Risk pill + score meter (colour is never the only signal) --- */
+.risk-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45em;
+  padding: 0.25rem 0.7rem;
+  border-radius: var(--radius-pill);
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+}
+.risk-pill--low {
+  background: var(--risk-low-bg);
+  color: var(--risk-low-ink);
+}
+.risk-pill--moderate {
+  background: var(--risk-moderate-bg);
+  color: var(--risk-moderate-ink);
+}
+.risk-pill--high {
+  background: var(--risk-high-bg);
+  color: var(--risk-high-ink);
+}
+
+.score {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  font-variant-numeric: tabular-nums;
+}
+.score__value {
+  font-size: clamp(2.2rem, 1.6rem + 2vw, 3rem);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+.score__of {
+  color: var(--muted);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.meter {
+  height: 8px;
+  border-radius: var(--radius-pill);
+  background: linear-gradient(
+    90deg,
+    var(--risk-low-bg),
+    var(--risk-moderate-bg) 55%,
+    var(--risk-high-bg)
+  );
+  position: relative;
+  margin-top: var(--space-2xs);
+}
+.meter__needle {
+  position: absolute;
+  top: -4px;
+  width: 3px;
+  height: 16px;
+  border-radius: 2px;
+  background: var(--ink-700);
+  transform: translateX(-50%);
+}
+.meter__scale {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 6px;
+  font-size: 0.7rem;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/* --- 9.3 Generic block inside a report preview --- */
+.rpt-block {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  padding: var(--space-s);
+  background: #fbfefe;
+}
+
+.rpt-block__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-2xs);
+  margin-bottom: var(--space-2xs);
+}
+
+.rpt-block__title {
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--water-800);
+}
+
+/* --- 9.4 Storm rows (NOAA/NHC matches) --- */
+.storm-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.15rem var(--space-s);
+  padding: 0.55rem 0;
+  border-top: 1px solid var(--line);
+  font-size: 0.9rem;
+}
+.storm-row:first-of-type {
+  border-top: 0;
+}
+.storm-row__name {
+  font-weight: 700;
+}
+.storm-row__meta {
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+.storm-row__dist {
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  white-space: nowrap;
+}
+
+/* --- 9.5 Source stamp — every dataset names itself --- */
+.source-stamp {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 0.9rem;
+  margin-top: var(--space-xs);
+  padding-top: var(--space-xs);
+  border-top: 1px dashed var(--line-strong);
+  font-size: 0.76rem;
+  color: var(--muted);
+}
+.source-stamp code {
+  font-size: 0.95em;
+  color: var(--water-800);
+}
+
+/* --- 9.6 Official-record check card --- */
+.check-card {
+  display: grid;
+  gap: 0.35rem;
+  padding: var(--space-s);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--water-700);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+}
+.check-card__title {
+  font-weight: 800;
+  font-size: 0.95rem;
+}
+.check-card__agency {
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+.check-card__ids {
+  font-size: 0.74rem;
+  color: var(--water-800);
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+/* --- 9.7 HIN decode --- */
+.hin {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  font-variant-numeric: tabular-nums;
+}
+.hin__seg {
+  display: grid;
+  gap: 2px;
+  justify-items: center;
+}
+.hin__chars {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-weight: 700;
+  font-size: 1.05rem;
+  letter-spacing: 0.08em;
+  padding: 0.3rem 0.5rem;
+  border-radius: var(--radius-xs);
+  background: var(--sky);
+  color: var(--ink-700);
+}
+.hin__label {
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--muted);
+}
+
+/* --- 9.8 Numbered process steps (order carries real meaning) --- */
+.steps {
+  display: grid;
+  gap: var(--space-l);
+  counter-reset: step;
+}
+@media (min-width: 860px) {
+  .steps {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+.step {
+  counter-increment: step;
+  padding-top: var(--space-s);
+  border-top: 2px solid var(--line-strong);
+}
+.step::before {
+  content: counter(step, decimal-leading-zero);
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  color: var(--accent-strong);
+  margin-bottom: var(--space-2xs);
+}
+.step h3 {
+  font-size: var(--step-1);
+  margin-bottom: var(--space-2xs);
+}
+.step p {
+  color: var(--muted);
+}
+
+/* --- 9.9 Verified-coverage stats (numbers must trace to the ledger) --- */
+.stats {
+  display: grid;
+  gap: var(--space-l);
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+.stat__value {
+  font-size: clamp(2rem, 1.5rem + 2vw, 2.8rem);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--on-dark);
+  font-variant-numeric: tabular-nums;
+}
+.stat__label {
+  margin-top: var(--space-2xs);
+  font-size: 0.9rem;
+  color: var(--muted-on-dark);
+}
+
+/* --- 9.10 Hero layout with the product alongside the pitch --- */
+@media (min-width: 1000px) {
+  .hero__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+    gap: var(--space-2xl);
+    align-items: center;
+  }
+}
+
+/* ==========================================================================
+   8. PRINT BASELINE
+   ========================================================================== */
+
+@media print {
+  .site-header,
+  .site-nav,
+  .skip-link {
+    display: none !important;
+  }
+  body {
+    background: #fff;
+    color: #111;
+  }
+  a {
+    color: #111;
+  }
+  .section--ink,
+  .site-footer {
+    background: #fff !important;
+    color: #111 !important;
+  }
+}
