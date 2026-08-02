@@ -158,7 +158,7 @@
                   <span class="rpt-block__title">Risk flags</span>
                   <ul class="rpt-list">
                     <li>Seller notes include risk terms: soft deck or hull spots.</li>
-                    <li>Regional storm exposure match near the submitted Florida county.</li>
+                    <li>Regional storm exposure match near the submitted location.</li>
                   </ul>
                 </div>
               </div>
@@ -184,7 +184,7 @@
               <h3>TrueHull reviews and flags</h3>
               <p>
                 Risk rules read the details you gave (engine hours, seller-note
-                language, HIN format, and county storm history in Florida) and mark
+                language, HIN format, and local storm history) and mark
                 what deserves a question.
               </p>
             </div>
@@ -205,9 +205,10 @@
           <p class="eyebrow">Where the guidance comes from</p>
           <h2 id="storm-title">Real hurricane tracks, not a vague warning.</h2>
           <p class="lede section__body">
-            For Florida counties, TrueHull compares the county's representative point
-            against NOAA/NHC Atlantic storm-track data and lists the named storms that
-            passed nearby, with dates and approximate distances you can ask about.
+            TrueHull compares the vessel location's representative point - your ZIP
+            code where we have one, otherwise the county - against NOAA/NHC storm-track
+            data and lists the named storms that passed nearby, with dates and
+            approximate distances you can ask about.
           </p>
 
           <div class="grid grid--2 section__body">
@@ -219,23 +220,23 @@
               <div class="report-shot__body">
                 <div class="rpt-block">
                   <div class="rpt-block__head">
-                    <span class="rpt-block__title">Matched storms · 10-year lookback</span>
+                    <span class="rpt-block__title">Matched storms · back to the 2004 season</span>
                     <span class="risk-pill risk-pill--moderate">Elevated</span>
                   </div>
                   <div class="storm-row">
+                    <span><span class="storm-row__name">CHARLEY</span>
+                      <span class="storm-row__meta">Cat 4 · 130 kt at closest approach · 13 Aug 2004</span></span>
+                    <span class="storm-row__dist">~14 mi</span>
+                  </div>
+                  <div class="storm-row">
                     <span><span class="storm-row__name">IAN</span>
-                      <span class="storm-row__meta">Cat 4 · 140 kt at closest approach · 28 Sep 2022</span></span>
+                      <span class="storm-row__meta">Cat 4 · 130 kt at closest approach · 28 Sep 2022</span></span>
                     <span class="storm-row__dist">~16 mi</span>
                   </div>
                   <div class="storm-row">
                     <span><span class="storm-row__name">IRMA</span>
                       <span class="storm-row__meta">Cat 1 · 80 kt at closest approach · 11 Sep 2017</span></span>
                     <span class="storm-row__dist">~24 mi</span>
-                  </div>
-                  <div class="storm-row">
-                    <span><span class="storm-row__name">SALLY</span>
-                      <span class="storm-row__meta">Tropical storm · 50 kt at closest approach · 13 Sep 2020</span></span>
-                    <span class="storm-row__dist">~50 mi</span>
                   </div>
                   <div class="source-stamp">
                     <span>Source: <code>NOAA/NHC HURDAT2</code></span>
@@ -260,11 +261,11 @@
                 <span class="trust-band__label">What this does not tell you</span>
                 <p>
                   This identifies <strong>possible regional exposure</strong> near the
-                  submitted Florida county. It does not verify where the vessel was
+                  submitted location. It does not verify where the vessel was
                   during a storm or whether it was damaged, and it is not an insurance,
                   title, salvage, registration, USCG or law-enforcement record check.
-                  County-level matching is Florida-only; other states get state-level
-                  storm guidance.
+                  Matching runs in all 50 states and DC, at ZIP precision where a ZIP
+                  is provided.
                 </p>
               </div>
             </div>
@@ -411,8 +412,8 @@
                 <h3>Where it stands today</h3>
                 <p>
                   TrueHull is early-stage and in active development. The report
-                  engine, county-level storm matching for Florida, 50-state record
-                  routing and HIN format review all work today. The public buyer experience is being
+                  engine, ZIP- and county-level storm matching in all 50 states,
+                  50-state record routing and HIN format review all work today. The public buyer experience is being
                   finished now.
                 </p>
               </div>
@@ -447,8 +448,8 @@
               <p class="stat__label">States with official-record routing, official sources only.</p>
             </div>
             <div class="stat">
-              <div class="stat__value">10 yr</div>
-              <p class="stat__label">NOAA/NHC storm-track lookback for Florida counties.</p>
+              <div class="stat__value">2004</div>
+              <p class="stat__label">First season NOAA/NHC records storm wind fields, and where our search starts.</p>
             </div>
             <div class="stat">
               <div class="stat__value">13</div>
