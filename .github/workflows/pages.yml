@@ -26,6 +26,34 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      # The site must not claim a capability the app has not shipped.
+      #
+      # B4/B5 of docs/legal/redlines/bard-accident-records.md (truehull repo)
+      # put a Coast Guard accident-search claim into index.html. That claim is
+      # TRUE only once BARD_ENABLED=true in the app. The redline's rule is that
+      # this copy lands before or with the flag, never after - which leaves a
+      # window where the copy exists and the flag does not, and this step is
+      # what makes that window safe.
+      #
+      # To deploy once BARD is live for real traffic: set the repository
+      # variable BARD_LIVE=true (Settings -> Secrets and variables -> Actions
+      # -> Variables). Until then this fails the deploy loudly rather than
+      # publishing a claim no report can support.
+      # The match is whitespace-normalised on purpose. The claim wraps across
+      # source lines in both places it appears, so a line-based `grep` finds
+      # NEITHER and the gate passes vacuously - which is exactly what the first
+      # version of this step did. Carriage returns are stripped too, because the
+      # file is authored CRLF even though git stores LF.
+      - name: Block deploying capability claims the app has not shipped
+        run: |
+          claims=$(tr -d '\r' < public/index.html | tr '\n' ' ' | tr -s ' ' \
+            | grep -o "Coast Guard boating-accident release" | wc -l)
+          echo "accident-search claims found: $claims"
+          if [ "$claims" -gt 0 ] && [ "${{ vars.BARD_LIVE }}" != "true" ]; then
+            echo "::error file=public/index.html::index.html claims TrueHull searches a Coast Guard boating-accident release, but the repository variable BARD_LIVE is not 'true'. Either set BARD_LIVE=true (only once BARD_ENABLED=true is serving real traffic in the app), or revert the B4/B5 copy from docs/legal/redlines/bard-accident-records.md. Deploy blocked."
+            exit 1
+          fi
+
       - name: Configure Pages
         uses: actions/configure-pages@v5
 
