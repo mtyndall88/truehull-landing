@@ -3,10 +3,14 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'; connect-src 'self' https://app.loops.so; form-action 'self' https://app.loops.so; img-src 'self'; style-src 'self'; font-src 'self'; base-uri 'self'; object-src 'none'"
+    />
     <title>TrueHull — Know the risk before you buy</title>
     <meta
       name="description"
-      content="TrueHull turns a used-boat listing into an organized due-diligence checklist: risk flags, NOAA/NHC storm-exposure guidance, HIN format review, and the official records to check in all 50 states."
+      content="TrueHull turns a used-boat listing into an organized due-diligence checklist: risk flags, NOAA/NHC storm-exposure guidance for the Atlantic, Gulf and eastern Pacific basins, HIN format review, and the official records to check in all 50 states."
     />
     <meta name="theme-color" content="#06222e" />
     <link rel="canonical" href="https://gettruehull.com/" />
@@ -51,8 +55,8 @@
       <div class="container site-header__inner">
         <a class="brand" href="#top" aria-label="TrueHull home">
           <img class="brand__mark" src="assets/truehull-mark.png" alt="" width="40" height="40" />
-          <span class="brand__wordmark">
-            <span class="brand__true">True</span><span class="brand__hull">Hull</span>
+          <span class="brand__wordmark" aria-label="TrueHull">
+            <span class="brand__true">True</span><span class="brand__hull">Hull</span><span class="brand-tm" aria-hidden="true">&trade;</span>
           </span>
         </a>
         <nav class="site-nav" aria-label="Primary">
@@ -94,8 +98,8 @@
                 your state, and exactly what to ask the seller before money moves.
               </p>
               <div class="actions">
-                <a class="btn btn--primary" href="#how">See how it works</a>
-                <a class="btn btn--on-dark" href="#contact">Get in touch</a>
+                <a class="btn btn--primary" href="#contact">Join the launch waitlist</a>
+                <a class="btn btn--on-dark" href="#how">See how it works</a>
               </div>
               <p class="hero__note">
                 TrueHull organizes your research. It does not access or verify official
@@ -120,7 +124,7 @@
                     <span class="score__of">/ 100 risk indicator</span>
                   </div>
                   <div class="meter" role="img" aria-label="Risk indicator 46 of 100, moderate">
-                    <span class="meter__needle" style="left: 46%"></span>
+                    <span class="meter__needle meter__needle--sample"></span>
                   </div>
                   <div class="meter__scale">
                     <span>Low 0</span><span>Moderate 30</span><span>High 60+</span>
@@ -207,8 +211,9 @@
           <p class="lede section__body">
             TrueHull compares the vessel location's representative point - your ZIP
             code where we have one, otherwise the county - against NOAA/NHC storm-track
-            data and lists the named storms that passed nearby, with dates and
-            approximate distances you can ask about.
+            data and lists the named storms in the Atlantic, Gulf and eastern
+            Pacific basins that passed nearby, with dates and approximate
+            distances you can ask about.
           </p>
 
           <div class="grid grid--2 section__body">
@@ -264,8 +269,8 @@
                   submitted location. It does not verify where the vessel was
                   during a storm or whether it was damaged, and it is not an insurance,
                   title, salvage, registration, USCG or law-enforcement record check.
-                  Matching runs in all 50 states and DC, at ZIP precision where a ZIP
-                  is provided.
+                  Matching runs in all 50 states and DC for the Atlantic, Gulf and
+                  eastern Pacific basins, at ZIP precision where a ZIP is provided.
                 </p>
               </div>
             </div>
@@ -277,11 +282,13 @@
       <section id="records" class="section" aria-labelledby="records-title">
         <div class="container">
           <p class="eyebrow">The part buyers get stuck on</p>
-          <h2 id="records-title">Boat records are state-by-state. We route you.</h2>
+          <h2 id="records-title">Boat records are scattered across state and federal agencies. We route you.</h2>
           <p class="lede section__body">
-            Every report lists the official checks for your state: title, registration,
-            liens and stolen-boat searches, with the agency link and the identifiers each
-            one needs. All 50 states, official sources only.
+            Every report routes you to the official checks for your boat: state title,
+            registration and lien records, the federal theft and documentation files, and
+            a state stolen-boat search where the state offers one - each with the agency
+            link and the identifiers it needs. We route you in all 50 states, to official
+            and authoritative sources.
           </p>
 
           <div class="grid grid--2 section__body">
@@ -371,9 +378,8 @@
                 for your state.
               </p>
               <p>
-                TrueHull reviews the HIN's format and uses it to search a public Coast
-                Guard boating-accident release. It does not decode the HIN against any
-                official manufacturer database.
+                <strong>This is a format review only.</strong> TrueHull does not decode
+                the HIN against any official manufacturer or government database.
               </p>
             </div>
           </div>
@@ -413,9 +419,10 @@
                 <h3>Where it stands today</h3>
                 <p>
                   TrueHull is early-stage and in active development. The report
-                  engine, ZIP- and county-level storm matching in all 50 states,
-                  50-state record routing and HIN format review all work today. The public buyer experience is being
-                  finished now.
+                  engine, ZIP- and county-level storm matching in all 50 states for
+                  the Atlantic, Gulf and eastern Pacific basins, 50-state routing to
+                  official state and federal checks, and HIN format review all work
+                  today. The public buyer experience is being finished now.
                 </p>
               </div>
               <div class="card">
@@ -446,15 +453,15 @@
           <div class="stats section__body">
             <div class="stat">
               <div class="stat__value">50</div>
-              <p class="stat__label">States with official-record routing, official sources only.</p>
+              <p class="stat__label">States where TrueHull routes you to the official state and federal record checks.</p>
             </div>
             <div class="stat">
               <div class="stat__value">2004</div>
               <p class="stat__label">First season NOAA/NHC records storm wind fields, and where our search starts.</p>
             </div>
             <div class="stat">
-              <div class="stat__value">13</div>
-              <p class="stat__label">Sections in the buyer report, with limits stated on every
+              <div class="stat__value">12+</div>
+              <p class="stat__label">Sections in every report, with limits stated on every
               section that makes a data claim.</p>
             </div>
           </div>
@@ -462,14 +469,12 @@
           <div class="trust-band section__band">
             <span class="trust-band__label">What TrueHull does not verify</span>
             <p>
-              TrueHull searches one public government record — a Coast Guard
-              boating-accident release — and does not access or verify any other
-              official record. A report does not confirm ownership, title status,
-              liens, theft or salvage history, insurance claims, registration, or
-              USCG documentation status, and it does not verify where a vessel was
-              during a storm or whether it was damaged. Nothing here replaces a
-              marine survey, a sea trial, or a title and lien search. Every report
-              recommends them.
+              TrueHull does not access or verify official records. A report does not
+              confirm ownership, title status, liens, theft or salvage history,
+              insurance claims, accident history, registration, or USCG documentation
+              status, and it does not verify where a vessel was during a storm or
+              whether it was damaged. Nothing here replaces a marine survey, a sea
+              trial, or a title and lien search. Every report recommends them.
             </p>
           </div>
         </div>
@@ -478,22 +483,85 @@
       <!-- ============ SAMPLE / CTA ============ -->
       <section id="contact" class="section" aria-labelledby="contact-title">
         <div class="container">
-          <p class="eyebrow">Get in touch</p>
+          <p class="eyebrow">The waitlist</p>
           <h2 id="contact-title">Building the first version of TrueHull</h2>
           <div class="prose section__body">
             <p>
-              The buyer experience is in active development. If you're getting ready to
-              buy a used boat, or you work in the marine industry and want to talk, we'd
-              like to hear from you. Partnership and business conversations are welcome.
+              The buyer experience is in active development. Join the launch waitlist and
+              we'll email you once, when TrueHull is ready to use. If you work in the
+              marine industry, partnership and business conversations are welcome too.
             </p>
           </div>
+
+          <form
+            class="waitlist section__body"
+            id="waitlist-form"
+            method="POST"
+            action="https://app.loops.so/api/newsletter-form/PLACEHOLDER-FORM-ID"
+          >
+            <label class="waitlist__label" for="waitlist-email">Email address</label>
+            <div class="waitlist__row">
+              <input
+                class="waitlist__input"
+                id="waitlist-email"
+                type="email"
+                name="email"
+                autocomplete="email"
+                inputmode="email"
+                placeholder="you@example.com"
+                required
+              />
+              <button class="btn btn--primary" type="submit">Join the launch waitlist</button>
+            </div>
+            <p class="waitlist__note">
+              One email when TrueHull is ready — nothing else. See the
+              <a href="#waitlist-privacy">waitlist privacy note</a>.
+            </p>
+            <p class="waitlist__status" id="waitlist-status" role="status" aria-live="polite"></p>
+            <noscript>
+              <p class="waitlist__note">
+                To join the waitlist, email
+                <a href="mailto:mark@gettruehull.com?subject=TrueHull%20launch%20waitlist">mark@gettruehull.com</a>.
+              </p>
+            </noscript>
+          </form>
+
           <div class="actions">
-            <a class="btn btn--primary" href="mailto:mark@gettruehull.com?subject=TrueHull%20Inquiry"
+            <a class="btn btn--secondary" href="mailto:mark@gettruehull.com?subject=TrueHull%20Inquiry"
               >Email the team</a
             >
             <a class="btn btn--secondary" href="mailto:support@gettruehull.com?subject=TrueHull%20Support"
               >General support</a
             >
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ WAITLIST PRIVACY ============ -->
+      <section id="waitlist-privacy" class="section section--foam" aria-labelledby="waitlist-privacy-title">
+        <div class="container">
+          <p class="eyebrow">Waitlist privacy</p>
+          <h2 id="waitlist-privacy-title">The waitlist collects your email, and nothing else.</h2>
+          <div class="prose section__body">
+            <p>
+              If you join the launch waitlist we collect <strong>your email address only</strong> —
+              no name, no phone, no address, no boat details. We use it for one thing: to email
+              you once, when TrueHull is ready to use. We do not sell it, rent it, or use it for
+              anything else.
+            </p>
+            <p>
+              Waitlist emails are handled by our email provider,
+              <a href="https://loops.so" rel="noopener noreferrer">Loops</a>, which stores the
+              address on our behalf. You can be removed at any time using the unsubscribe link in
+              any email we send, or by writing to
+              <a href="mailto:support@gettruehull.com?subject=Waitlist%20removal">support@gettruehull.com</a>.
+            </p>
+            <p>
+              TrueHull is the controller of this information; you can reach us at
+              <a href="mailto:support@gettruehull.com?subject=Waitlist%20privacy">support@gettruehull.com</a>.
+              This note covers the launch waitlist only; it is not the full privacy policy for
+              the TrueHull service, which ships with the product.
+            </p>
           </div>
         </div>
       </section>
@@ -533,30 +601,11 @@
         </div>
         <div class="site-footer__bottom">
           <p>&copy; 2026 TrueHull. All rights reserved.</p>
-          <p>Sample report figures use illustrative vessel data.</p>
+          <p><a href="#waitlist-privacy">Waitlist privacy</a> · Sample report figures use illustrative vessel data.</p>
         </div>
       </div>
     </footer>
 
-    <script>
-      // Progressive enhancement: without JS the menu is simply visible.
-      document.documentElement.classList.add('js');
-      (function () {
-        var nav = document.querySelector('.site-nav');
-        var btn = nav && nav.querySelector('.site-nav__toggle');
-        if (!nav || !btn) return;
-        btn.addEventListener('click', function () {
-          var open = nav.getAttribute('data-open') === 'true';
-          nav.setAttribute('data-open', String(!open));
-          btn.setAttribute('aria-expanded', String(!open));
-        });
-        nav.addEventListener('click', function (e) {
-          if (e.target.closest('a')) {
-            nav.setAttribute('data-open', 'false');
-            btn.setAttribute('aria-expanded', 'false');
-          }
-        });
-      })();
-    </script>
+    <script src="assets/site.js" defer></script>
   </body>
 </html>

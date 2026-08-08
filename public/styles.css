@@ -175,8 +175,10 @@ html {
   scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
-  /* Offset in-page anchors so the sticky header doesn't cover targets. */
-  scroll-padding-top: 5rem;
+  /* Anchor offsets live on :target rules below, in one place. A scroll-padding
+     here would STACK with them - that stacking (5rem here + 5rem on :target +
+     the section's own padding) is exactly what once landed nav jumps ~165px
+     below the header with a dead band in between. */
 }
 
 body {
@@ -255,8 +257,20 @@ hr {
   border-top: 1px solid var(--line);
 }
 
+/* Keep any bare anchor target clear of the ~67px sticky header. */
 :target {
   scroll-margin-top: 5rem;
+}
+
+/* Padded sections already carry --space-3xl (64-112px) of their own top
+   padding, which provides the post-jump breathing room by itself. The generic
+   5rem above would stack on top of it, landing headings ~165px down with a
+   dead band under the header. So for sections the offset only covers whatever
+   part of the header the padding does not: header + small gap minus the
+   section's padding, floored at zero. Lands the eyebrow ~17-25px below the
+   header at every breakpoint. */
+.section:target {
+  scroll-margin-top: max(0px, calc(5.25rem - var(--space-3xl)));
 }
 
 /* ==========================================================================
@@ -542,6 +556,18 @@ hr {
   color: var(--brand-teal-on-dark);
 }
 
+/* Trademark superscript. Kept upright and in the body face so it does not
+   inherit the wordmark's synthesised italic; aria-hidden in markup. */
+.brand-tm {
+  font-family: var(--font-sans);
+  font-style: normal;
+  font-weight: 600;
+  font-size: 0.5em;
+  line-height: 1;
+  vertical-align: super;
+  margin-left: 0.08em;
+}
+
 /* --- 7.4 Navigation ---
    Real <button> toggle, not a <details> disclosure: modern Chrome hides
    details content via content-visibility on ::details-content, which a
@@ -813,20 +839,6 @@ hr {
   overflow: hidden;
 }
 
-.hero::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background-image: repeating-linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.045) 0 1px,
-    transparent 1px 64px
-  );
-  -webkit-mask-image: linear-gradient(180deg, transparent, #000 45%);
-  mask-image: linear-gradient(180deg, transparent, #000 45%);
-  pointer-events: none;
-}
-
 .hero__inner {
   position: relative;
   z-index: 1;
@@ -982,6 +994,11 @@ hr {
   border-radius: 2px;
   background: var(--ink-700);
   transform: translateX(-50%);
+}
+/* Fixed position for the illustrative sample report (was an inline style,
+   moved here so the page runs under style-src 'self'). */
+.meter__needle--sample {
+  left: 46%;
 }
 .meter__scale {
   display: flex;
@@ -1175,6 +1192,61 @@ hr {
     gap: var(--space-2xl);
     align-items: center;
   }
+}
+
+/* ==========================================================================
+   7b. WAITLIST FORM
+   ========================================================================== */
+
+.waitlist {
+  max-width: 34rem;
+}
+.waitlist__label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.4rem;
+  color: var(--ink-900);
+}
+.waitlist__row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+.waitlist__input {
+  flex: 1 1 15rem;
+  min-width: 0;
+  padding: 0.7rem 0.9rem;
+  font: inherit;
+  color: var(--ink-900);
+  background: #fff;
+  border: 1px solid rgba(16, 34, 46, 0.28);
+  border-radius: 8px;
+}
+.waitlist__input:focus-visible {
+  outline: 2px solid var(--brand-teal);
+  outline-offset: 2px;
+  border-color: var(--brand-teal);
+}
+.waitlist__note {
+  margin-top: 0.6rem;
+  font-size: 0.85rem;
+  color: var(--ink-700);
+}
+.waitlist__status {
+  margin-top: 0.5rem;
+  min-height: 1.2em;
+  font-size: 0.9rem;
+}
+.waitlist__status[data-state='ok'] {
+  color: var(--success);
+  font-weight: 600;
+}
+.waitlist__status[data-state='error'] {
+  color: var(--danger);
+  font-weight: 600;
+}
+.waitlist__status[data-state='pending'] {
+  color: var(--ink-700);
 }
 
 /* ==========================================================================

@@ -54,6 +54,23 @@ jobs:
             exit 1
           fi
 
+      # The waitlist must not ship unwired.
+      #
+      # The signup form posts to a Loops newsletter-form endpoint. Until the real
+      # form ID is filled in, both index.html and site.js carry the literal
+      # PLACEHOLDER-FORM-ID, and site.js refuses every submission. Shipping that
+      # to the live site gives every visitor a dead primary CTA - the one thing
+      # the interim site exists to do (capture launch interest) would silently
+      # not work. This fails the deploy until the real form ID is in place.
+      - name: Block deploying an unwired waitlist
+        run: |
+          placeholders=$(grep -rl "PLACEHOLDER-FORM-ID" public/ | wc -l)
+          echo "files still carrying PLACEHOLDER-FORM-ID: $placeholders"
+          if [ "$placeholders" -gt 0 ]; then
+            echo "::error::The waitlist form still uses PLACEHOLDER-FORM-ID. Replace it with the real Loops newsletter-form ID in public/index.html and public/assets/site.js before deploying, or every visitor hits a dead signup. Deploy blocked."
+            exit 1
+          fi
+
       - name: Configure Pages
         uses: actions/configure-pages@v5
 
