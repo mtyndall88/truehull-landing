@@ -5,21 +5,47 @@
 // Without JS the menu is simply visible; this marks that JS is available.
 document.documentElement.classList.add('js');
 
-// ---- Mobile nav toggle (moved verbatim from the former inline script) ----
+// ---- Mobile nav toggle ----
 (function () {
   var nav = document.querySelector('.site-nav');
   var btn = nav && nav.querySelector('.site-nav__toggle');
   if (!nav || !btn) return;
+
+  function isOpen() {
+    return nav.getAttribute('data-open') === 'true';
+  }
+  function setOpen(open) {
+    nav.setAttribute('data-open', String(open));
+    btn.setAttribute('aria-expanded', String(open));
+  }
+  // returnFocus is for keyboard/programmatic closes only - after a link tap the
+  // page is navigating, and after an outside tap the user is pointing elsewhere,
+  // so yanking focus back to the toggle in those cases would be hostile.
+  function close(returnFocus) {
+    if (!isOpen()) return;
+    setOpen(false);
+    if (returnFocus) btn.focus();
+  }
+
   btn.addEventListener('click', function () {
-    var open = nav.getAttribute('data-open') === 'true';
-    nav.setAttribute('data-open', String(!open));
-    btn.setAttribute('aria-expanded', String(!open));
+    setOpen(!isOpen());
   });
+
+  // Close on link tap (the target section is what the user wants to see).
   nav.addEventListener('click', function (e) {
-    if (e.target.closest('a')) {
-      nav.setAttribute('data-open', 'false');
-      btn.setAttribute('aria-expanded', 'false');
-    }
+    if (e.target.closest('a')) close(false);
+  });
+
+  // Escape closes and returns focus to the toggle, the expected keyboard path.
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && isOpen()) close(true);
+  });
+
+  // A tap/click outside the nav closes it. Guarded by isOpen so it costs
+  // nothing while the menu is shut, and scoped to the open panel so taps on
+  // the page do not fight anything else.
+  document.addEventListener('click', function (e) {
+    if (isOpen() && !nav.contains(e.target)) close(false);
   });
 })();
 

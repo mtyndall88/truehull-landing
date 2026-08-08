@@ -234,9 +234,13 @@ a {
   text-decoration: none;
 }
 
-a:hover {
-  text-decoration: underline;
-  text-underline-offset: 0.15em;
+/* Hover styling only where a real pointer can hover. On touch, an ungated
+   :hover sticks after the tap until the user taps elsewhere. */
+@media (hover: hover) {
+  a:hover {
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+  }
 }
 
 ul,
@@ -513,9 +517,11 @@ hr {
   flex: 0 0 auto;
 }
 
-.brand:hover {
-  text-decoration: none;
-  opacity: 0.92;
+@media (hover: hover) {
+  .brand:hover {
+    text-decoration: none;
+    opacity: 0.92;
+  }
 }
 
 .brand__mark {
@@ -584,6 +590,7 @@ hr {
   gap: 0.5em;
   min-height: 44px;
   padding: 0.55rem 0.9rem;
+  touch-action: manipulation;
   font: inherit;
   font-weight: 700;
   color: var(--deep);
@@ -619,9 +626,11 @@ hr {
   color: var(--deep);
 }
 
-.site-nav__link:hover {
-  background: var(--sky);
-  text-decoration: none;
+@media (hover: hover) {
+  .site-nav__link:hover {
+    background: var(--sky);
+    text-decoration: none;
+  }
 }
 
 .site-nav__link[aria-current="page"] {
@@ -647,6 +656,17 @@ hr {
     background: var(--surface);
     border-bottom: 1px solid var(--line);
     box-shadow: var(--shadow-soft);
+    /* The panel is absolute against the sticky header, so page scroll cannot
+       reveal anything below the fold - in a short/landscape viewport its last
+       item ("Get in touch") once fell off-screen and was unreachable. Cap it to
+       the space beneath the header and let it scroll itself. The `100%` in the
+       max-height calc resolves against the header (the positioned containing
+       block), i.e. the header height, so this is viewport-minus-header at any
+       header size. `contain` stops the scroll from chaining to the page. */
+    max-height: calc(100vh - 100%);
+    max-height: calc(100dvh - 100%);
+    overflow-y: auto;
+    overscroll-behavior: contain;
   }
   .js .site-nav[data-open="true"] .site-nav__panel {
     display: flex;
@@ -670,6 +690,8 @@ hr {
   padding: 0.7rem 1.25rem;
   border: 2px solid transparent;
   border-radius: var(--radius-sm);
+  /* Suppress the 300ms double-tap-to-zoom delay on this tap target. */
+  touch-action: manipulation;
   font: inherit;
   font-weight: 800;
   line-height: 1.1;
@@ -693,9 +715,11 @@ hr {
   color: var(--accent-ink);
   border-color: var(--accent);
 }
-.btn--primary:hover {
-  background: var(--accent-strong);
-  border-color: var(--accent-strong);
+@media (hover: hover) {
+  .btn--primary:hover {
+    background: var(--accent-strong);
+    border-color: var(--accent-strong);
+  }
 }
 
 /* Secondary — marine outline for light surfaces. */
@@ -704,9 +728,11 @@ hr {
   color: var(--water-800);
   border-color: var(--line-strong);
 }
-.btn--secondary:hover {
-  background: var(--sky);
-  border-color: var(--water-700);
+@media (hover: hover) {
+  .btn--secondary:hover {
+    background: var(--sky);
+    border-color: var(--water-700);
+  }
 }
 
 /* On dark surfaces. */
@@ -715,9 +741,11 @@ hr {
   color: var(--on-dark);
   border-color: rgba(234, 245, 247, 0.5);
 }
-.btn--on-dark:hover {
-  background: rgba(234, 245, 247, 0.12);
-  border-color: var(--on-dark);
+@media (hover: hover) {
+  .btn--on-dark:hover {
+    background: rgba(234, 245, 247, 0.12);
+    border-color: var(--on-dark);
+  }
 }
 
 .btn--block {
@@ -771,6 +799,13 @@ hr {
   display: grid;
   gap: 0.55rem;
   font-size: 0.95rem;
+}
+/* These are the smallest tap targets on the page (~19px line-box). A little
+   block padding lifts each past the 24px WCAG 2.5.8 minimum without changing
+   the visual rhythm; inline-block so the padding makes a real tap box. */
+.site-footer__col a {
+  display: inline-block;
+  padding-block: 4px;
 }
 
 .site-footer__bottom {
@@ -1211,6 +1246,14 @@ hr {
   display: flex;
   flex-wrap: wrap;
   gap: 0.6rem;
+}
+/* When the row is too narrow to sit the input and button side by side they
+   wrap - and a button left at its natural width looks ragged under a
+   full-width input. Below the wrap point, make the button fill its own line. */
+@media (max-width: 30rem) {
+  .waitlist__row .btn {
+    flex: 1 1 100%;
+  }
 }
 .waitlist__input {
   flex: 1 1 15rem;
