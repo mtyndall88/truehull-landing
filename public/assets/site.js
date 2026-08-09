@@ -50,9 +50,10 @@ document.documentElement.classList.add('js');
 })();
 
 // ---- Waitlist submit ----
-// Posts the email to Loops without leaving the page, and shows an inline
-// result. If JS is off, the <noscript> mailto in the form is the fallback;
-// if the fetch fails, the same mailto is offered inline.
+// Posts the email to Loops via fetch, never a browser navigation, and shows our
+// own inline status. Loops' endpoint returns JSON, which is why a JS submit is
+// used instead of a native form POST - it lets us render success/error in place.
+// The <noscript> mailto in the form is the JS-off fallback.
 (function () {
   var form = document.getElementById('waitlist-form');
   if (!form) return;
@@ -62,24 +63,45 @@ document.documentElement.classList.add('js');
   var button = form.querySelector('button[type="submit"]');
   var MAILTO =
     'mailto:mark@gettruehull.com?subject=TrueHull%20launch%20waitlist';
+  // The Loops audience this form feeds. Loops' own embed sends this; without it
+  // a signup can be created but not attached to the intended list.
+  var MAILING_LIST = 'cmslkxfqiae8f0j11e8y33onx';
+  var RATE_MSG = 'Too many attempts. Please try again in a moment.';
+  var THROTTLE_KEY = 'th-waitlist-last';
+  var THROTTLE_MS = 60000;
 
   function setStatus(message, state) {
     if (!status) return;
     status.textContent = message;
     status.setAttribute('data-state', state || '');
   }
+  // A genuine failure (network down, or a Cloudflare block that never returns a
+  // JSON body) - offer the mailto so no one is stranded.
+  function offerMailto(lead) {
+    if (!status) return;
+    status.setAttribute('data-state', 'error');
+    status.textContent = lead + ' ';
+    var link = document.createElement('a');
+    link.href = MAILTO;
+    link.textContent = 'mark@gettruehull.com';
+    status.appendChild(link);
+  }
+  function lastSubmit() {
+    try { return Number(localStorage.getItem(THROTTLE_KEY)) || 0; } catch (e) { return 0; }
+  }
+  function markSubmit(v) {
+    try { localStorage.setItem(THROTTLE_KEY, String(v)); } catch (e) {}
+  }
 
   form.addEventListener('submit', function (e) {
     e.preventDefault();
     if (!input || !input.value) return;
 
-    // Guard against the pre-launch placeholder so a test click before the
-    // real form ID is wired does not silently look like a failure.
-    if (form.action.indexOf('PLACEHOLDER-FORM-ID') !== -1) {
-      setStatus(
-        'The waitlist is not connected yet. Please check back at launch.',
-        'error'
-      );
+    // Client-side throttle: one signup a minute per browser. This is what keeps
+    // us from tripping Loops' own server-side 429 in the first place.
+    var now = Date.now();
+    if (lastSubmit() + THROTTLE_MS > now) {
+      setStatus(RATE_MSG, 'error');
       return;
     }
 
@@ -89,34 +111,33 @@ document.documentElement.classList.add('js');
     fetch(form.action, {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: new URLSearchParams({ email: input.value }).toString()
+      body: new URLSearchParams({
+        userGroup: '',
+        mailingLists: MAILING_LIST,
+        email: input.value
+      }).toString()
     })
       .then(function (res) {
-        return res.json().catch(function () {
-          return { success: res.ok };
+        return res.json().catch(function () { return {}; }).then(function (data) {
+          return { ok: res.ok, statusCode: res.status, data: data };
         });
       })
-      .then(function (data) {
-        if (data && data.success) {
+      .then(function (r) {
+        if (r.ok && r.data.success !== false) {
+          markSubmit(now);
           form.reset();
-          setStatus(
-            "You're on the list. We'll email you once, when TrueHull is ready.",
-            'ok'
-          );
+          setStatus("You're on the list. We'll email you once, when TrueHull is ready.", 'ok');
+        } else if (r.statusCode === 429) {
+          setStatus(RATE_MSG, 'error');
+        } else if (r.data && r.data.message) {
+          // A specific validation message from Loops (e.g. malformed email).
+          setStatus(r.data.message, 'error');
         } else {
-          throw new Error((data && data.message) || 'Subscription failed');
+          offerMailto('Something went wrong. Email us to join:');
         }
       })
       .catch(function () {
-        setStatus('', '');
-        if (status) {
-          status.setAttribute('data-state', 'error');
-          status.textContent = "Something went wrong. Email us to join: ";
-          var link = document.createElement('a');
-          link.href = MAILTO;
-          link.textContent = 'mark@gettruehull.com';
-          status.appendChild(link);
-        }
+        offerMailto('Something went wrong. Email us to join:');
       })
       .then(function () {
         if (button) button.disabled = false;
