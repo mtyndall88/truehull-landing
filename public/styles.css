@@ -1,33 +1,47 @@
 /* ==========================================================================
-   TrueHull — Canonical design system
+   TrueHull — Chartroom v1.4 (the TrueHull design system)
    --------------------------------------------------------------------------
-   "Premium Marine Intelligence" foundation stylesheet.
+   Restyle of the interim marketing site onto Chartroom v1.4 (app repo
+   design.md / design.html, 2026-08-10). The :root block below is the §9
+   token block copied verbatim, followed by a small, clearly-marked set of
+   landing-local tokens carrying the §2 interface + logotype font stacks that
+   §9 does not itself tokenize. No colors, radii, type sizes, or block-level
+   spacings exist outside the Chartroom tokens.
 
-   This is the single source of truth for the marketing site's tokens and
-   shared components, authored so the TrueHull app can later adopt the same
-   token set (see SITE-NOTES.md at the repo root for the adoption plan).
+   v1.4 posture (design.md §10 divergences, all deliberate):
+     - Ink is the action color: no colored CTA fills, no pills. Buttons are
+       2px-radius ink rectangles; the on-deep primary fills with --foam.
+     - The fix (crosshair + mono caps label) replaces the sans eyebrow.
+     - Full-bleed banded sections (.band) with 1160px .shell, 104px rhythm,
+       hairline separators, alternating --sky tint (tint bands remap --muted).
+     - Flat until touched: surfaces carry hairline borders at rest; the
+       --shadow-soft lift is earned on hover only.
+     - Rectangular mono flag stamps (no pills).
+     - Serif display headings; the hero display at --text-display (4.4rem).
+     - Hero and footer are --deep bands carrying the committed GMRT Hump
+       bathymetry SVG (real data; GMRT credit ships in the footer). --deep is
+       reserved for hero / footer / map chrome — never a mid-page theme.
+
+   Zero external requests: all fonts and the hump SVG are self-hosted. The
+   restyle changes zero copy.
 
    Section map:
-     1. Fonts (self-hosted, no third-party requests)
+     1. Fonts (self-hosted)
      2. Design tokens (:root)
-     3. Reset + base elements
-     4. Motion + accessibility primitives
-     5. Layout primitives (container, section, prose, grid)
-     6. Typographic helpers (eyebrow, lede, measure)
-     7. Components — skip link, header + nav, brand lockup,
-        buttons, footer, cards, trust band
-     8. Print baseline
-
-   Colour contrast: body/UI text is verified >= 5.5:1 on its surface.
-   The gold accent is ~2.6:1 on white, so it is used ONLY on dark surfaces
-   and as CTA/emphasis fills (with dark ink text), never as text on light.
+     3. Reset + base
+     4. Motion + a11y primitives
+     5. Bands + layout primitives
+     6. The fix + typographic helpers
+     7. Components — skip link, navbar, brand, buttons, cards, flags,
+        report preview, trust band, hero, waitlist, footer
+     8. Print
    ========================================================================== */
 
 /* ==========================================================================
    1. FONTS — self-hosted latin subsets (see public/assets/fonts/)
    ========================================================================== */
 
-/* Inter: one variable file covers weights 400–800. */
+/* Inter: one variable file covers weights 400–800 — body, UI, nav, the fix. */
 @font-face {
   font-family: "Inter";
   font-style: normal;
@@ -39,8 +53,26 @@
     U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
+/* Source Serif 4 — the display voice (design.md §2). ALL headings, weight
+   700. Two vendored faces: normal + italic (the italic sets the one-phrase
+   hero accent; never synthesised). */
+@font-face {
+  font-family: "Source Serif 4";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("assets/fonts/source-serif-4-latin-700-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Source Serif 4";
+  font-style: italic;
+  font-weight: 700;
+  font-display: swap;
+  src: url("assets/fonts/source-serif-4-latin-700-italic.woff2") format("woff2");
+}
+
 /* Orbitron 900 — brand wordmark only. Italic is synthesised (Orbitron ships
-   no true italic), matching the existing lockup treatment. */
+   no true italic), matching the shipped lockup. */
 @font-face {
   font-family: "Orbitron";
   font-style: normal;
@@ -57,104 +89,65 @@
    ========================================================================== */
 
 :root {
-  /* --- Brand anchors (fixed across app + marketing) --- */
-  --brand-navy: #062b63; /* the "True" in the wordmark */
-  --brand-teal: #0796a8; /* the "Hull" in the wordmark */
-
-  /* --- Marine ink + water scale (dark -> mid) --- */
-  --ink-900: #06222e; /* darkest — hero / inverted surfaces */
-  --ink-800: #0b2a38;
-  --ink-700: #102432; /* primary text on light (15.9:1 on white) */
-  --deep: #062f3e; /* deep marine slate */
-  --water-800: #075d70; /* water-strong; eyebrow/label on light (7.5:1) */
-  --water-700: #0d7284; /* primary interactive / links (5.6:1 on white) */
-  --water-500: #0796a8; /* brand teal — accents on dark */
-
-  /* --- Neutrals / surfaces --- */
-  --surface: #ffffff;
-  --foam: #f5fafb; /* airy content section background */
-  --sky: #e9f6f8; /* tinted chip / hover surface */
-  --line: #d7e5ea; /* hairline borders */
-  --line-strong: #c3d6dd;
-  --muted: #4d6670; /* secondary text on light (~6.1:1 on white) */
-
-  /* --- Foreground scale for dark surfaces --- */
-  --on-dark: #eaf5f7; /* primary text on ink surfaces */
-  --muted-on-dark: #cbe0e6; /* secondary text on dark surfaces */
-  --quiet-on-dark: #9fc0c8; /* footer chrome / meta on dark */
-  --link-on-dark: #dcecef; /* links on dark surfaces */
-  --header-bg: rgba(247, 252, 253, 0.9); /* translucent sticky header */
-
-  /* Inverted wordmark (the brand navy is unreadable on ink). */
-  --brand-navy-on-dark: #a9c4e6;
-  --brand-teal-on-dark: #37c0d4;
-
-  /* --- Gold accent (used sparingly; dark surfaces + CTA only) --- */
-  --accent: #d19426; /* CTA fill / emphasis on dark */
-  --accent-strong: #b87a15; /* hover */
-  --accent-ink: #241a06; /* text on gold (6.5:1) */
-
-  /* --- Semantic risk vocabulary (shared with the app's report UI) --- */
-  --danger: #b43b31;
-  --warning: #b87511;
-  --success: #25735d;
-  --risk-low-bg: #dff2ea;
-  --risk-low-ink: #1c5b48;
-  --risk-moderate-bg: #fff0d6;
-  --risk-moderate-ink: #7a4f0c;
-  --risk-high-bg: #ffe2df;
-  --risk-high-ink: #8a2d24;
-
-  /* --- Elevation --- */
+  /* ------------------------------------------------------------------ */
+  /* Chartroom v1.4 token block — design.md §9, copied verbatim.        */
+  /* ------------------------------------------------------------------ */
+  /* text color */
+  --ink: #102432; --muted: #637783; --muted-strong: #52646f;
+  /* structure */
+  --line: #d7e5ea; --surface: #ffffff; --foam: #f5fafb; --sky: #e9f6f8;
+  /* brand */
+  --water: #0d7284; --water-strong: #075d70; --deep: #062f3e;
+  --brand-true: #062B63; --brand-true-on-deep: #ffffff;
+  --brand-hull: #0796A8;
+  --accent: #d99728; --accent-ink: #8f5f08; --sand-bright: #e8b04b;
+  /* component state colors (v1.4: ink CTA ladder; amber CTA tokens retired) */
+  --btn-hover: #1d3550; --btn-down: #0a1a26;
+  --quiet-down: #dcf0f4; --input-hover-border: #9fb9c4;
+  /* status */
+  --success: #25735d; --success-tint: #e7f2ee;
+  --warning: #b87511; --warning-ink: #96600e; --warning-tint: #faf0dd;
+  --danger: #b43b31; --danger-tint: #f9ecea;
+  /* charts: light surface, fixed order */
+  --chart-1: #078ba3; --chart-2: #d99728; --chart-3: #4f5fd0;
+  --chart-4: #c2467e; --chart-other: #8a97a3;
+  /* charts: deep surface */
+  --chart-dark-1: #2fa5bd; --chart-dark-2: #c28417;
+  --chart-dark-3: #7b88e8; --chart-dark-4: #d4699a;
+  /* type scale */
+  --text-display-brand: clamp(4rem, 11vw, 7.5rem);
+  --text-display: clamp(2.7rem, 5.4vw, 4.4rem);
+  --text-h2-marketing: clamp(1.8rem, 4vw, 2.55rem);
+  --text-h1: 1.9rem; --text-h2: 1.4rem; --text-h3: 1.125rem;
+  --text-body: 1rem; --text-small: 0.875rem; --text-pill: 0.82rem;
+  --text-micro: 0.78rem; --text-score: 2rem; --text-data: 0.9rem;
+  /* spacing */
+  --s-1: 4px; --s-2: 8px; --s-3: 12px; --s-4: 16px; --s-5: 24px;
+  --s-6: 32px; --s-7: 48px; --s-8: 64px; --s-9: 96px;
+  /* radius */
+  --r-micro: 2px; --r-data: 4px; --r-small: 6px; --r-base: 8px;
+  --r-feature: 12px; --r-pill: 999px;
+  /* elevation */
   --shadow: 0 18px 48px rgba(6, 47, 62, 0.12);
   --shadow-soft: 0 10px 30px rgba(6, 47, 62, 0.08);
+  /* motion */
+  --motion-fast: 120ms; --motion-base: 180ms; --motion-panel: 240ms;
+  --ease-decel: cubic-bezier(0.2, 0.6, 0.2, 1);
+  /* families */
+  --font-display: "Source Serif 4", Constantia, "Iowan Old Style",
+    "Palatino Linotype", Georgia, "Times New Roman", serif;
+  --mono: "JetBrains Mono", "Cascadia Code", Consolas, ui-monospace, monospace;
 
-  /* --- Typography --- */
+  /* ------------------------------------------------------------------ */
+  /* Landing-local tokens — §9 is silent on these; per design.md's      */
+  /* "match the existing idiom" rule they carry the §2 interface +      */
+  /* logotype font stacks. No invented colors, radii, sizes, spacings.  */
+  /* ------------------------------------------------------------------ */
   --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system,
-    BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
-  --font-display: "Orbitron", "Rajdhani", var(--font-sans);
-
-  /* Fluid modular scale (~1.2 mobile -> ~1.25 desktop) */
-  --step--1: clamp(0.82rem, 0.79rem + 0.14vw, 0.9rem);
-  --step-0: clamp(1rem, 0.96rem + 0.2vw, 1.1rem);
-  --step-1: clamp(1.2rem, 1.13rem + 0.35vw, 1.4rem);
-  --step-2: clamp(1.44rem, 1.32rem + 0.6vw, 1.85rem);
-  --step-3: clamp(1.72rem, 1.53rem + 0.95vw, 2.4rem);
-  --step-4: clamp(2.05rem, 1.75rem + 1.5vw, 3.1rem);
-  --step-5: clamp(2.45rem, 2rem + 2.25vw, 4rem);
-
-  --lh-tight: 1.1;
-  --lh-snug: 1.3;
-  --lh-body: 1.65;
-  --measure: 65ch; /* comfortable prose line length */
-
-  /* --- Spacing scale --- */
-  --space-3xs: 0.25rem;
-  --space-2xs: 0.5rem;
-  --space-xs: 0.75rem;
-  --space-s: 1rem;
-  --space-m: 1.5rem;
-  --space-l: 2rem;
-  --space-xl: 3rem;
-  --space-2xl: 4rem;
-  --space-3xl: clamp(4rem, 3rem + 5vw, 7rem); /* section rhythm */
-
-  /* --- Radii --- */
-  --radius-xs: 4px;
-  --radius-sm: 6px;
-  --radius-md: 10px;
-  --radius-lg: 16px;
-  --radius-xl: 24px;
-  --radius-pill: 999px;
-
-  /* --- Layout --- */
-  --container: 1180px;
-  --container-narrow: 760px;
-  --gutter: clamp(1.25rem, 5vw, 4rem);
-
-  /* --- Focus --- */
-  --focus-ring: 3px solid rgba(7, 150, 168, 0.65);
-  --focus-offset: 3px;
+    BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; /* §2 interface stack */
+  --font-logo: "Orbitron", sans-serif;                 /* §2 logotype stack */
+  --measure: 70ch;                                     /* §2 body measure  */
+  --focus-ring-input: 3px solid rgba(15, 107, 124, 0.55); /* §5 input focus */
 }
 
 /* ==========================================================================
@@ -175,18 +168,15 @@ html {
   scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
-  /* Anchor offsets live on :target rules below, in one place. A scroll-padding
-     here would STACK with them - that stacking (5rem here + 5rem on :target +
-     the section's own padding) is exactly what once landed nav jumps ~165px
-     below the header with a dead band in between. */
 }
 
 body {
-  background: var(--surface);
-  color: var(--ink-700);
+  /* §3 page gradient — subtle, never busy. */
+  background: linear-gradient(180deg, #f7fcfd 0%, var(--foam) 42%, #ffffff 100%);
+  color: var(--ink);
   font-family: var(--font-sans);
-  font-size: var(--step-0);
-  line-height: var(--lh-body);
+  font-size: var(--text-body);
+  line-height: 1.6;
   font-synthesis: none; /* prefer true weights; wordmark opts back in below */
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
@@ -200,42 +190,44 @@ video {
   max-width: 100%;
 }
 
+/* All headings take the display serif at 700 (design.md §2). Sentence case,
+   natural tracking. */
 h1,
 h2,
 h3,
 h4 {
-  line-height: var(--lh-tight);
-  font-weight: 800;
-  letter-spacing: -0.015em;
-  color: var(--ink-700);
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--ink);
   text-wrap: balance;
 }
 
 h1 {
-  font-size: var(--step-5);
+  font-size: var(--text-h2-marketing);
+  line-height: 1.2;
 }
 h2 {
-  font-size: var(--step-4);
+  font-size: var(--text-h2-marketing);
 }
 h3 {
-  font-size: var(--step-2);
-  letter-spacing: -0.01em;
+  font-size: var(--text-h3);
+  line-height: 1.3;
 }
 h4 {
-  font-size: var(--step-1);
+  font-size: var(--text-h3);
 }
 
 p {
   text-wrap: pretty;
+  max-width: var(--measure);
 }
 
 a {
-  color: var(--water-700);
+  color: var(--water);
   text-decoration: none;
 }
 
-/* Hover styling only where a real pointer can hover. On touch, an ungated
-   :hover sticks after the tap until the user taps elsewhere. */
 @media (hover: hover) {
   a:hover {
     text-decoration: underline;
@@ -249,7 +241,7 @@ ol {
 }
 
 small {
-  font-size: var(--step--1);
+  font-size: var(--text-small);
 }
 
 strong {
@@ -261,20 +253,12 @@ hr {
   border-top: 1px solid var(--line);
 }
 
-/* Keep any bare anchor target clear of the ~67px sticky header. */
+/* Keep any anchor target clear of the sticky navbar. */
 :target {
   scroll-margin-top: 5rem;
 }
-
-/* Padded sections already carry --space-3xl (64-112px) of their own top
-   padding, which provides the post-jump breathing room by itself. The generic
-   5rem above would stack on top of it, landing headings ~165px down with a
-   dead band under the header. So for sections the offset only covers whatever
-   part of the header the padding does not: header + small gap minus the
-   section's padding, floored at zero. Lands the eyebrow ~17-25px below the
-   header at every breakpoint. */
-.section:target {
-  scroll-margin-top: max(0px, calc(5.25rem - var(--space-3xl)));
+.band:target {
+  scroll-margin-top: 4.5rem;
 }
 
 /* ==========================================================================
@@ -293,16 +277,25 @@ hr {
     transition-duration: 0.001ms !important;
     scroll-behavior: auto !important;
   }
+  /* Lift/press transforms are neutralized per-selector in a reduced-motion
+     block at the END of the file — placed after the button rules so source
+     order wins (design.md §6). The skip-link's positioning transform is left
+     intact (never a blanket * { transform: none }). */
 }
 
-/* Global focus treatment — visible everywhere, keyboard users only. */
+/* Global focus treatment — §5 interactive default: 2px solid --water. */
 :focus-visible {
-  outline: var(--focus-ring);
-  outline-offset: var(--focus-offset);
-  border-radius: var(--radius-xs);
+  outline: 2px solid var(--water);
+  outline-offset: 2px;
 }
 
-/* Screen-reader-only utility. */
+/* On deep bands a --water ring computes ~2.5:1 (invisible); use --sand-bright
+   (7.24:1 on deep), per design.md §5. */
+.hero :focus-visible,
+.site-footer :focus-visible {
+  outline-color: var(--sand-bright);
+}
+
 .visually-hidden {
   position: absolute !important;
   width: 1px;
@@ -316,152 +309,168 @@ hr {
 }
 
 /* ==========================================================================
-   5. LAYOUT PRIMITIVES
+   5. BANDS + LAYOUT PRIMITIVES (design.md §4/§4b)
    ========================================================================== */
 
-.container {
-  width: 100%;
-  max-width: var(--container);
+/* Full-bleed bands with an inner shell; a hairline separates consecutive
+   bands; alternating bands tint --sky and remap --muted → --muted-strong so
+   inherited muted text keeps AA on the tint (5.57:1). */
+.band {
+  padding: clamp(64px, 9vw, 104px) clamp(18px, 4vw, 40px);
+}
+.band + .band {
+  border-top: 1px solid var(--line);
+}
+.band--tint {
+  background: var(--sky);
+  --muted: var(--muted-strong);
+}
+.shell {
+  max-width: 1160px;
   margin-inline: auto;
-  padding-inline: var(--gutter);
 }
 
-.container--narrow {
-  max-width: var(--container-narrow);
+/* --- The chart-margin rail (design.md §4b) — a fixed 64px instrument ruler
+   at ≥1240px: --foam ground, a 1px --line right border, graduated tick marks
+   (96px majors, 24px minors as repeating gradients), and a rotated mono
+   caption. aria-hidden chrome at z-index 5; content shifts right by the rail
+   width. Below 1240px it disappears entirely — never a squeezed variant. --- */
+.rail {
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 64px;
+  display: none;
+  z-index: 5;
+  border-right: 1px solid var(--line);
+  background: repeating-linear-gradient(
+        180deg,
+        var(--input-hover-border) 0 1px,
+        transparent 1px 96px
+      )
+      44px 0 / 8px 100% no-repeat,
+    repeating-linear-gradient(180deg, var(--line) 0 1px, transparent 1px 24px)
+      52px 0 / 6px 100% no-repeat,
+    var(--foam);
+}
+.rail span {
+  position: absolute;
+  top: 50%;
+  left: 14px;
+  transform: rotate(180deg) translateY(50%);
+  writing-mode: vertical-rl;
+  font-family: var(--mono);
+  font-size: 0.71rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  color: var(--muted-strong);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+@media (min-width: 1240px) {
+  .rail {
+    display: block;
+  }
+  body {
+    padding-left: 64px;
+  }
+}
+@media print {
+  .rail {
+    display: none !important;
+  }
 }
 
-/* Vertical section rhythm. */
-.section {
-  padding-block: var(--space-3xl);
+/* Section rhythm inside a shell. */
+.section__body {
+  margin-top: var(--s-5);
+}
+.section__band {
+  margin-top: var(--s-7);
 }
 
-.section--tight {
-  padding-block: var(--space-2xl);
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-4);
+  margin-top: var(--s-6);
 }
 
-.section--foam {
-  background: var(--foam);
-}
-
-.section--ink {
-  background: var(--ink-900);
-  color: var(--on-dark);
-}
-
-/* Headings invert on dark surfaces (the base rule sets dark ink). */
-.section--ink h1,
-.section--ink h2,
-.section--ink h3,
-.section--ink h4 {
-  color: #fff;
-}
-
-/* Muted list used for seller questions etc. */
 .q-list {
   color: var(--muted);
-  margin-top: var(--space-2xs);
+  margin-top: var(--s-2);
   display: grid;
-  gap: 0.4rem;
+  gap: var(--s-2);
 }
 
-/* Prose blocks stay within a readable measure. */
 .prose {
   max-width: var(--measure);
 }
-
 .prose > * + * {
-  margin-top: var(--space-s);
+  margin-top: var(--s-4);
 }
 
-/* Simple auto-fit grid for card rows. */
 .grid {
   display: grid;
-  gap: var(--space-l);
+  gap: var(--s-5);
 }
-
 @media (min-width: 640px) {
   .grid--2 {
     grid-template-columns: repeat(2, 1fr);
   }
 }
-
 @media (min-width: 900px) {
   .grid--3 {
     grid-template-columns: repeat(3, 1fr);
   }
 }
 
-/* Vertical stack utility. */
 .stack > * + * {
-  margin-top: var(--space-s);
+  margin-top: var(--s-4);
 }
 .stack--l > * + * {
-  margin-top: var(--space-l);
-}
-
-/* Section rhythm — the eyebrow › heading › body › band › actions cadence
-   lives here, not in per-page inline styles, so every page inherits the
-   same vertical music. */
-.section__body {
-  margin-top: var(--space-m);
-}
-
-.section__band {
-  margin-top: var(--space-xl);
-}
-
-/* Shared action row (hero + section CTAs). */
-.actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-s);
-  margin-top: var(--space-l);
+  margin-top: var(--s-6);
 }
 
 /* ==========================================================================
-   6. TYPOGRAPHIC HELPERS
+   6. THE FIX + TYPOGRAPHIC HELPERS (design.md §2)
    ========================================================================== */
 
-/* Eyebrow / kicker. On light surfaces it is marine-teal (7.5:1); the gold
-   accent appears only as the leading tick so colour is never the sole
-   signal and contrast always passes. */
+/* The fix — an 11px CSS crosshair (two 1px currentColor strokes) + a mono
+   600 all-caps label, 0.75rem, 0.2em tracking, block-level flex, 10px gap to
+   the heading. --accent-ink on light, --sand-bright on deep. */
 .eyebrow {
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  gap: 0.6em;
-  margin: 0 0 var(--space-s);
-  font-size: var(--step--1);
-  font-weight: 700;
-  letter-spacing: 0.11em;
+  gap: 10px;
+  margin: 0 0 10px;
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--water-800);
+  color: var(--accent-ink);
 }
-
 .eyebrow::before {
   content: "";
-  width: 1.6em;
-  height: 2px;
-  background: var(--accent);
-  border-radius: var(--radius-pill);
+  width: 11px;
+  height: 11px;
+  flex: none;
+  background: linear-gradient(currentColor 0 0) center / 100% 1px no-repeat,
+    linear-gradient(currentColor 0 0) center / 1px 100% no-repeat;
 }
-
-/* On dark surfaces the eyebrow text itself can carry the gold accent. */
-.section--ink .eyebrow,
 .hero .eyebrow,
-.eyebrow--on-dark {
-  color: var(--accent);
+.site-footer .eyebrow {
+  color: var(--sand-bright);
 }
 
 .lede {
-  font-size: var(--step-1);
-  line-height: var(--lh-snug);
-  color: var(--muted);
+  color: var(--muted-strong);
   max-width: var(--measure);
 }
-
-.section--ink .lede,
 .hero .lede {
-  color: var(--muted-on-dark);
+  color: var(--sky);
 }
 
 /* ==========================================================================
@@ -471,119 +480,100 @@ hr {
 /* --- 7.1 Skip link --- */
 .skip-link {
   position: absolute;
-  left: var(--space-s);
-  top: var(--space-s);
+  left: var(--s-4);
+  top: var(--s-4);
   z-index: 100;
   padding: 0.7rem 1.1rem;
-  background: var(--ink-900);
+  background: var(--deep);
   color: #fff;
   font-weight: 700;
-  border-radius: var(--radius-sm);
+  border-radius: var(--r-micro);
   transform: translateY(-150%);
-  transition: transform 0.15s ease;
+  transition: transform var(--motion-base) var(--ease-decel);
 }
-
 .skip-link:focus {
   transform: translateY(0);
   text-decoration: none;
 }
 
-/* --- 7.2 Site header --- */
+/* --- 7.2 Sticky navbar (design.md §4b — the instrument frame) --- */
 .site-header {
   position: sticky;
   top: 0;
-  z-index: 20;
-  background: var(--header-bg);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
+  z-index: 10;
+  background: var(--foam);
   border-bottom: 1px solid var(--line);
 }
-
 .site-header__inner {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--space-m);
-  min-height: 64px;
-  padding-block: 0.6rem;
+  gap: var(--s-5);
+  min-height: 60px;
+  padding: 12px clamp(18px, 4vw, 40px);
 }
 
 /* --- 7.3 Brand lockup --- */
 .brand {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: var(--s-2);
   color: var(--deep);
   flex: 0 0 auto;
+  /* 44px touch target (design.md §0.6) without growing the bar: pad the hit
+     area and pull it back with a negative margin (the nav-anchor trick). */
+  padding-block: 5px;
+  margin-block: -5px;
 }
-
 @media (hover: hover) {
   .brand:hover {
     text-decoration: none;
     opacity: 0.92;
   }
 }
-
 .brand__mark {
-  width: 40px;
-  height: 40px;
+  width: 34px;
+  height: 34px;
   border: 1px solid rgba(7, 93, 112, 0.18);
-  border-radius: var(--radius-md);
+  border-radius: var(--r-small);
   flex: 0 0 auto;
 }
-
 .brand__wordmark {
   display: inline-flex;
-  font-family: var(--font-display);
-  font-style: italic; /* synthesised oblique — matches app lockup */
+  font-family: var(--font-logo);
+  font-style: italic; /* synthesised oblique — matches shipped lockup */
   font-weight: 900;
-  font-synthesis: style; /* allow the faux-italic slant */
+  font-synthesis: style;
   line-height: 1;
   white-space: nowrap;
-  font-size: clamp(1.4rem, 1.1rem + 1.4vw, 2rem);
-  letter-spacing: 0;
+  font-size: clamp(1.3rem, 2vw, 1.6rem);
 }
-
 .brand__true {
-  color: var(--brand-navy);
+  color: var(--brand-true);
 }
 .brand__hull {
-  color: var(--brand-teal);
+  color: var(--brand-hull);
 }
-
-/* Inverted lockup for dark surfaces (e.g. footer on ink). */
-.brand--on-dark {
-  color: #fff;
-}
-.brand--on-dark .brand__true {
-  color: var(--brand-navy-on-dark);
-}
-.brand--on-dark .brand__hull {
-  color: var(--brand-teal-on-dark);
-}
-
-/* Trademark superscript. Kept upright and in the body face so it does not
-   inherit the wordmark's synthesised italic; aria-hidden in markup. */
+/* Trademark — rides the wordmark: 0.42em, upright, top-aligned, weight 700
+   (design.md §1). aria-hidden; the accessible name stays "TrueHull". */
 .brand-tm {
+  align-self: flex-start;
   font-family: var(--font-sans);
   font-style: normal;
-  font-weight: 600;
-  font-size: 0.5em;
+  font-weight: 700;
+  font-size: 0.42em;
   line-height: 1;
-  vertical-align: super;
-  margin-left: 0.08em;
+  vertical-align: top;
+  margin-left: 1px;
 }
 
 /* --- 7.4 Navigation ---
-   Real <button> toggle, not a <details> disclosure: modern Chrome hides
-   details content via content-visibility on ::details-content, which a
-   display override cannot defeat. Progressive enhancement instead —
-   without JS the menu is simply visible; script.js collapses it on small
-   screens and wires the toggle. */
+   Progressive enhancement: without JS the menu is simply visible; site.js
+   collapses it below 900px and wires the toggle. Desktop anchors carry the
+   44px hit-area trick (padding 14px 4px; margin -14px 0). */
 .site-nav {
   margin: 0;
 }
-
 .site-nav__toggle {
   display: none; /* revealed by JS on small screens only */
   align-items: center;
@@ -592,53 +582,47 @@ hr {
   padding: 0.55rem 0.9rem;
   touch-action: manipulation;
   font: inherit;
-  font-weight: 700;
-  color: var(--deep);
-  background: var(--sky);
-  border: 1px solid var(--line-strong);
-  border-radius: var(--radius-pill);
+  font-weight: 600;
+  color: var(--ink);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-micro);
   cursor: pointer;
 }
-
 .site-nav__panel {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: var(--space-2xs);
+  gap: var(--s-4);
 }
-
 .site-nav__list {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: var(--space-2xs);
+  gap: var(--s-4);
   list-style: none;
   padding: 0;
   margin: 0;
 }
-
 .site-nav__link {
   display: inline-block;
-  padding: 0.5rem 0.8rem;
-  border-radius: var(--radius-pill);
-  font-weight: 700;
-  font-size: 0.95rem;
-  color: var(--deep);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--muted-strong);
+  padding: 14px 4px;
+  margin: -14px 0;
 }
-
 @media (hover: hover) {
   .site-nav__link:hover {
-    background: var(--sky);
+    color: var(--ink);
     text-decoration: none;
   }
 }
-
 .site-nav__link[aria-current="page"] {
-  color: var(--water-800);
-  background: var(--sky);
+  color: var(--ink);
 }
 
-/* Small screens, JS active: collapse behind the toggle. */
+/* Small screens, JS active: collapse the panel behind the toggle. */
 @media (max-width: 899px) {
   .js .site-nav__toggle {
     display: inline-flex;
@@ -651,18 +635,14 @@ hr {
     top: 100%;
     flex-direction: column;
     align-items: stretch;
-    gap: var(--space-2xs);
-    padding: var(--space-s) var(--gutter) var(--space-l);
-    background: var(--surface);
+    gap: var(--s-2);
+    padding: var(--s-4) clamp(18px, 4vw, 40px) var(--s-6);
+    background: var(--foam);
     border-bottom: 1px solid var(--line);
     box-shadow: var(--shadow-soft);
-    /* The panel is absolute against the sticky header, so page scroll cannot
-       reveal anything below the fold - in a short/landscape viewport its last
-       item ("Get in touch") once fell off-screen and was unreachable. Cap it to
-       the space beneath the header and let it scroll itself. The `100%` in the
-       max-height calc resolves against the header (the positioned containing
-       block), i.e. the header height, so this is viewport-minus-header at any
-       header size. `contain` stops the scroll from chaining to the page. */
+    /* Cap to the space beneath the header and scroll internally — the panel is
+       absolute in the sticky header, so a short/landscape viewport once left
+       its last item unreachable. `100%` resolves against the header height. */
     max-height: calc(100vh - 100%);
     max-height: calc(100dvh - 100%);
     overflow-y: auto;
@@ -676,407 +656,423 @@ hr {
     align-items: stretch;
   }
   .site-nav__link {
-    padding-block: 0.7rem;
+    padding: 0.7rem 0;
+    margin: 0;
   }
 }
 
-/* --- 7.5 Buttons --- */
+/* --- 7.5 Buttons — ink is the action color (design.md §5, v1.4) ---
+   No colored CTA fills, no pills: 2px radius, 700, 0.9375rem, 48px, ink fill.
+   The on-deep primary fills with --foam (an ink fill vanishes on deep). */
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.5em;
   min-height: 48px;
-  padding: 0.7rem 1.25rem;
-  border: 2px solid transparent;
-  border-radius: var(--radius-sm);
-  /* Suppress the 300ms double-tap-to-zoom delay on this tap target. */
+  padding: 12px 24px;
+  border: 1px solid transparent;
+  border-radius: var(--r-micro);
   touch-action: manipulation;
-  font: inherit;
-  font-weight: 800;
+  font-family: var(--font-sans);
+  font-size: 0.9375rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
   line-height: 1.1;
   text-align: center;
   cursor: pointer;
-  transition: background-color 0.15s ease, border-color 0.15s ease,
-    color 0.15s ease, transform 0.15s ease;
+  transition: background-color var(--motion-fast) var(--ease-decel),
+    border-color var(--motion-fast) var(--ease-decel),
+    color var(--motion-fast) var(--ease-decel),
+    box-shadow var(--motion-base) var(--ease-decel),
+    transform var(--motion-base) var(--ease-decel);
 }
-
 .btn:hover {
   text-decoration: none;
 }
-
+/* The press — the one CSS tap confirmation (design.md §5), not gated. */
 .btn:active {
   transform: translateY(1px);
 }
 
-/* Primary — gold fill, dark ink text (6.5:1). */
+/* Primary (on light) — ink fill, white text (15.9:1). */
 .btn--primary {
-  background: var(--accent);
-  color: var(--accent-ink);
-  border-color: var(--accent);
+  background: var(--ink);
+  color: #fff;
+  border-color: var(--ink);
 }
 @media (hover: hover) {
   .btn--primary:hover {
-    background: var(--accent-strong);
-    border-color: var(--accent-strong);
+    background: var(--btn-hover);
+    border-color: var(--btn-hover);
+    transform: translateY(-1px);
   }
 }
+.btn--primary:active {
+  background: var(--btn-down);
+  border-color: var(--btn-down);
+  transform: translateY(1px);
+}
+.btn--primary:focus-visible {
+  background: var(--btn-hover);
+  border-color: var(--btn-hover);
+  outline: 2px solid var(--water);
+  outline-offset: 2px;
+}
+/* Disabled rung (design.md §5 / design.html) — the waitlist submit button is
+   set disabled by site.js during the Loops fetch, so this state is reachable. */
+.btn--primary:disabled {
+  background: var(--line);
+  color: var(--muted);
+  border-color: var(--line);
+  cursor: default;
+  transform: none;
+}
 
-/* Secondary — marine outline for light surfaces. */
+/* Primary on the deep hero — foam fill, deep text (13.44:1). */
+.hero .btn--primary {
+  background: var(--foam);
+  color: var(--deep);
+  border-color: var(--foam);
+}
+@media (hover: hover) {
+  .hero .btn--primary:hover {
+    background: #fff;
+    border-color: #fff;
+  }
+}
+.hero .btn--primary:active {
+  background: var(--sky);
+  border-color: var(--sky);
+}
+.hero .btn--primary:focus-visible {
+  background: #fff;
+  border-color: #fff;
+  outline: 2px solid var(--sand-bright);
+}
+
+/* Secondary on deep — the shipped translucent-white ladder. */
+.btn--on-dark {
+  background: rgba(255, 255, 255, 0.14);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.36);
+}
+@media (hover: hover) {
+  .btn--on-dark:hover {
+    background: rgba(255, 255, 255, 0.22);
+    border-color: rgba(255, 255, 255, 0.36);
+  }
+}
+.btn--on-dark:active {
+  background: rgba(255, 255, 255, 0.28);
+}
+.btn--on-dark:focus-visible {
+  background: rgba(255, 255, 255, 0.22);
+  outline: 2px solid var(--sand-bright);
+}
+
+/* Quiet (on light) — transparent, hairline border, water text. */
 .btn--secondary {
   background: transparent;
-  color: var(--water-800);
-  border-color: var(--line-strong);
+  color: var(--water);
+  border-color: var(--line);
 }
 @media (hover: hover) {
   .btn--secondary:hover {
     background: var(--sky);
-    border-color: var(--water-700);
   }
 }
-
-/* On dark surfaces. */
-.btn--on-dark {
-  background: transparent;
-  color: var(--on-dark);
-  border-color: rgba(234, 245, 247, 0.5);
+.btn--secondary:active {
+  background: var(--quiet-down);
 }
-@media (hover: hover) {
-  .btn--on-dark:hover {
-    background: rgba(234, 245, 247, 0.12);
-    border-color: var(--on-dark);
-  }
+.btn--secondary:focus-visible {
+  background: var(--sky);
+  outline: 2px solid var(--water);
+  outline-offset: 2px;
 }
 
 .btn--block {
   width: 100%;
 }
 
-/* --- 7.6 Footer ---
-   Light surface so the brand lockup uses the same navy/teal as the header
-   (the inverted variant was a different colour, which read as inconsistent). */
-.site-footer {
-  background: var(--foam);
-  color: var(--muted);
-  border-top: 1px solid var(--line);
-}
-
-.site-footer a {
-  color: var(--water-700);
-}
-
-.site-footer__top {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: var(--space-xl);
-  padding-block: var(--space-2xl) var(--space-l);
-}
-
-.site-footer__tagline {
-  margin-top: var(--space-s);
-  color: var(--muted);
-  max-width: 34ch;
-}
-
-.site-footer__nav {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-m) var(--space-xl);
-}
-
-.site-footer__col h2 {
-  font-size: var(--step--1);
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: var(--water-800);
-  margin-bottom: var(--space-xs);
-}
-
-.site-footer__col ul {
-  list-style: none;
-  padding: 0;
-  display: grid;
-  gap: 0.55rem;
-  font-size: 0.95rem;
-}
-/* These are the smallest tap targets on the page (~19px line-box). A little
-   block padding lifts each past the 24px WCAG 2.5.8 minimum without changing
-   the visual rhythm; inline-block so the padding makes a real tap box. */
-.site-footer__col a {
-  display: inline-block;
-  padding-block: 4px;
-}
-
-.site-footer__bottom {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-s) var(--space-m);
-  justify-content: space-between;
-  align-items: center;
-  padding-block: var(--space-m) var(--space-l);
-  border-top: 1px solid var(--line);
-  font-size: var(--step--1);
-  color: var(--muted);
-}
-
-/* --- 7.7 Card (base for report-preview + benefit modules) --- */
+/* --- 7.6 Cards (design.md §5, v1.4) — flat at rest, 4px radius --- */
 .card {
   background: var(--surface);
   border: 1px solid var(--line);
-  border-radius: var(--radius-lg);
-  padding: var(--space-l);
-  box-shadow: var(--shadow-soft);
+  border-radius: var(--r-data);
+  padding: var(--s-5);
 }
-
 .card h3 {
-  margin-bottom: var(--space-2xs);
+  margin-bottom: var(--s-2);
 }
-
 .card p {
   color: var(--muted);
 }
 
-/* --- 7.8 Trust band — limitations presented as a first-class component,
-   never fine print (§6.3). Quiet, legible, marine-tinted. --- */
+/* --- 7.7 Trust band — limitations as a first-class component, never fine
+   print. A calm bordered well with a mono guidance label. --- */
 .trust-band {
-  background: var(--sky);
-  border-left: 4px solid var(--water-700);
-  border-radius: var(--radius-md);
-  padding: var(--space-l);
-  color: var(--ink-700);
-  max-width: var(--measure); /* the component owns its own measure */
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--water);
+  border-radius: var(--r-data);
+  padding: var(--s-5);
+  color: var(--ink);
+  max-width: var(--measure);
 }
-
 .trust-band__label {
   display: block;
-  font-size: var(--step--1);
-  font-weight: 800;
-  letter-spacing: 0.06em;
+  font-family: var(--mono);
+  font-size: 0.71rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--water-800);
-  margin-bottom: var(--space-2xs);
+  color: var(--water-strong);
+  margin-bottom: var(--s-2);
 }
 
-/* --- 7.9 Hero (interim treatment; full art direction lands on feat/home) ---
-   Token-driven dark hero with a soft marine glow and a faint depth-line
-   motif drawn purely in CSS — no stretched logo, no imagery, no motion. */
+/* --- 7.8 The fix voice on deep is set above; hero + footer follow --- */
+
+/* --- 7.9 Hero — --deep band carrying the committed GMRT Hump SVG, under a
+   bottom scrim so the trailing type never contests the chart art. The
+   background lives on the band element; --deep is reserved for hero/footer. */
 .hero {
   position: relative;
-  background: radial-gradient(
-      120% 120% at 85% -10%,
-      rgba(7, 150, 168, 0.22),
-      transparent 55%
+  background-color: var(--deep);
+  background-image: linear-gradient(
+      0deg,
+      rgba(6, 47, 62, 0.85) 0%,
+      rgba(6, 47, 62, 0) 30%
     ),
-    radial-gradient(90% 90% at 0% 110%, rgba(6, 43, 99, 0.4), transparent 60%),
-    var(--ink-900);
-  color: var(--on-dark);
-  overflow: hidden;
+    url("assets/hump-bathymetry.svg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  color: #fff;
 }
-
 .hero__inner {
   position: relative;
   z-index: 1;
-  padding-block: clamp(4rem, 3rem + 6vw, 8rem);
+  max-width: 1160px;
+  margin-inline: auto;
+  padding: clamp(64px, 9vw, 120px) clamp(18px, 4vw, 40px) clamp(56px, 7vw, 96px);
 }
-
+.hero__grid {
+  display: grid;
+  gap: var(--s-7);
+}
+@media (min-width: 1000px) {
+  .hero__grid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.95fr);
+    gap: var(--s-8);
+    align-items: center;
+  }
+}
 .hero h1 {
   color: #fff;
-  margin-block: var(--space-s) var(--space-m);
-  max-width: 16ch;
+  font-size: var(--text-display);
+  line-height: 1.06;
+  letter-spacing: -0.015em;
+  max-width: 17ch;
+  margin: 0 0 var(--s-4);
 }
-
+/* The one-phrase italic-accent (design.md §2) — serif italic, --brand-hull on
+   deep (4.00:1 large-text; the headline is display-scale). */
+.hero h1 em {
+  font-style: italic;
+  color: var(--brand-hull);
+}
 .hero__note {
-  margin-top: var(--space-m);
-  color: var(--muted-on-dark);
-  font-size: var(--step--1);
+  margin-top: var(--s-5);
+  color: var(--sky);
+  font-size: var(--text-small);
   max-width: 52ch;
 }
 
-
 /* ==========================================================================
-   9. PRODUCT PREVIEW COMPONENTS
+   9. PRODUCT PREVIEW COMPONENTS (the report vocabulary, v1.4-toned)
    --------------------------------------------------------------------------
-   Stylised recreations of the app's report vocabulary (§6.3), used to show
-   the product itself as the page's hero imagery. All data rendered through
-   these is illustrative and must carry a visible sample label (§1.6).
+   Flat, hairline-bordered, mono data, rectangular flag stamps. All data
+   rendered through these is illustrative and carries a visible sample label.
    ========================================================================== */
 
-/* --- 9.1 Report frame — the "document" the buyer receives --- */
 .report-shot {
   background: var(--surface);
-  /* Re-assert dark text: the frame is white but often sits on a dark
-     surface (hero), and must not inherit the on-dark foreground. */
-  color: var(--ink-700);
-  border: 1px solid var(--line);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow);
-  overflow: hidden;
+  color: var(--ink);
+  /* The survey-certificate plate (design.md §5): a double rule — outer 1px
+     --ink neatline, a 5px gutter, then an inner 1px --input-hover-border rule
+     drawn with a negative-offset outline (an outline prints, unlike a
+     box-shadow, so the inner rule survives print like the certificate's). */
+  border: 1px solid var(--ink);
+  border-radius: 0;
+  padding: 5px;
+  outline: 1px solid var(--input-hover-border);
+  outline-offset: -6px;
   text-align: left;
 }
-
-/* Limitation note sitting directly beneath a capability inside a preview.
-   Deliberately legible, not fine print. */
-.rpt-note {
-  margin-top: var(--space-2xs);
-  font-size: 0.78rem;
-  line-height: 1.5;
-  color: var(--muted);
-}
-
-/* Lists rendered inside a report preview. */
-.rpt-list {
-  margin: 0.4rem 0 0;
-  padding-left: 1.1em;
-  font-size: 0.88rem;
-  display: grid;
-  gap: 0.35rem;
-}
-
 .report-shot__bar {
   display: flex;
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
-  gap: var(--space-2xs);
-  padding: 0.7rem var(--space-m);
-  background: var(--ink-800);
-  color: var(--on-dark);
-  font-size: 0.78rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
+  gap: var(--s-2);
+  padding: 10px 12px;
+  background: var(--foam);
+  border-bottom: 1px solid var(--input-hover-border); /* the plate-head rule (§5) */
+  font-family: var(--mono);
+  font-size: 0.71rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
+  color: var(--muted-strong);
 }
-
-/* Sample-data flag — always visible on any preview. */
 .sample-flag {
   display: inline-flex;
   align-items: center;
   gap: 0.45em;
-  padding: 2px 8px;
-  border-radius: var(--radius-pill);
-  background: rgba(209, 148, 38, 0.18);
-  color: #f0d9a8;
-  font-size: 0.7rem;
-  letter-spacing: 0.05em;
+  padding: 3px 8px;
+  border-radius: var(--r-micro);
+  border: 1px solid var(--input-hover-border);
+  background: transparent;
+  color: var(--muted-strong);
+  font-family: var(--mono);
+  font-size: 0.71rem;
+  letter-spacing: 0.08em;
+  text-transform: none;
 }
-
 .report-shot__body {
-  padding: var(--space-m);
+  padding: var(--s-5);
   display: grid;
-  gap: var(--space-m);
+  gap: var(--s-5);
+}
+.rpt-note {
+  margin-top: var(--s-2);
+  font-size: var(--text-small);
+  line-height: 1.5;
+  color: var(--muted);
+}
+.rpt-list {
+  margin: var(--s-2) 0 0;
+  padding-left: 1.1em;
+  font-size: var(--text-small);
+  display: grid;
+  gap: var(--s-1);
+}
+.rpt-block {
+  border: 1px solid var(--line);
+  border-radius: var(--r-data);
+  padding: var(--s-4);
+  background: var(--surface);
+}
+.rpt-block__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+  margin-bottom: var(--s-2);
+}
+.rpt-block__title {
+  font-family: var(--mono);
+  font-size: 0.71rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted-strong);
 }
 
-/* --- 9.2 Risk pill + score meter (colour is never the only signal) --- */
+/* --- Flags — rectangular mono stamps (design.md §5, v1.4) --- */
 .risk-pill {
   display: inline-flex;
   align-items: center;
-  gap: 0.45em;
-  padding: 0.25rem 0.7rem;
-  border-radius: var(--radius-pill);
-  font-size: 0.82rem;
-  font-weight: 800;
-  letter-spacing: 0.03em;
+  gap: 8px;
+  padding: 5px 11px;
+  border-radius: var(--r-micro);
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: var(--sky);
+  color: var(--deep);
+}
+.risk-pill::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: currentColor;
+  flex: 0 0 auto;
 }
 .risk-pill--low {
-  background: var(--risk-low-bg);
-  color: var(--risk-low-ink);
+  background: var(--success-tint);
+  color: var(--success);
 }
 .risk-pill--moderate {
-  background: var(--risk-moderate-bg);
-  color: var(--risk-moderate-ink);
+  background: var(--warning-tint);
+  color: var(--warning-ink);
 }
 .risk-pill--high {
-  background: var(--risk-high-bg);
-  color: var(--risk-high-ink);
+  background: var(--danger-tint);
+  color: var(--danger);
 }
 
+/* --- Score + meter — the meter fills in INK, never a status color --- */
 .score {
   display: flex;
   align-items: baseline;
-  gap: 0.5rem;
+  gap: var(--s-2);
   font-variant-numeric: tabular-nums;
 }
 .score__value {
-  font-size: clamp(2.2rem, 1.6rem + 2vw, 3rem);
-  font-weight: 800;
+  font-family: var(--mono);
+  font-size: var(--text-score);
+  font-weight: 700;
   line-height: 1;
-  letter-spacing: -0.02em;
 }
 .score__of {
   color: var(--muted);
-  font-size: 0.9rem;
+  font-size: var(--text-small);
   font-weight: 600;
 }
-
 .meter {
-  height: 8px;
-  border-radius: var(--radius-pill);
-  background: linear-gradient(
-    90deg,
-    var(--risk-low-bg),
-    var(--risk-moderate-bg) 55%,
-    var(--risk-high-bg)
-  );
+  height: 10px;
+  border-radius: var(--r-micro);
+  background: var(--sky);
   position: relative;
-  margin-top: var(--space-2xs);
+  margin-top: var(--s-2);
+  overflow: hidden;
 }
 .meter__needle {
   position: absolute;
-  top: -4px;
+  top: 0;
+  bottom: 0;
   width: 3px;
-  height: 16px;
-  border-radius: 2px;
-  background: var(--ink-700);
+  background: var(--ink);
   transform: translateX(-50%);
 }
-/* Fixed position for the illustrative sample report (was an inline style,
-   moved here so the page runs under style-src 'self'). */
 .meter__needle--sample {
   left: 46%;
 }
 .meter__scale {
   display: flex;
   justify-content: space-between;
-  margin-top: 6px;
-  font-size: 0.7rem;
+  margin-top: 7px;
+  font-family: var(--mono);
+  font-size: 0.71rem;
   color: var(--muted);
+  letter-spacing: 0.08em;
   font-variant-numeric: tabular-nums;
 }
 
-/* --- 9.3 Generic block inside a report preview --- */
-.rpt-block {
-  border: 1px solid var(--line);
-  border-radius: var(--radius-md);
-  padding: var(--space-s);
-  background: #fbfefe;
-}
-
-.rpt-block__head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: var(--space-2xs);
-  margin-bottom: var(--space-2xs);
-}
-
-.rpt-block__title {
-  font-size: 0.82rem;
-  font-weight: 800;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--water-800);
-}
-
-/* --- 9.4 Storm rows (NOAA/NHC matches) --- */
+/* --- Storm rows — meta + distance are data (mono) --- */
 .storm-row {
   display: grid;
   grid-template-columns: 1fr auto;
-  gap: 0.15rem var(--space-s);
+  gap: var(--s-1) var(--s-4);
   padding: 0.55rem 0;
   border-top: 1px solid var(--line);
-  font-size: 0.9rem;
+  font-size: var(--text-small);
 }
 .storm-row:first-of-type {
   border-top: 0;
@@ -1086,90 +1082,97 @@ hr {
 }
 .storm-row__meta {
   color: var(--muted);
-  font-size: 0.8rem;
+  font-family: var(--mono);
+  font-size: var(--text-data);
+  font-variant-numeric: tabular-nums;
 }
 .storm-row__dist {
-  font-weight: 800;
+  font-family: var(--mono);
+  font-weight: 700;
   font-variant-numeric: tabular-nums;
   text-align: right;
   white-space: nowrap;
 }
 
-/* --- 9.5 Source stamp — every dataset names itself --- */
+/* --- Source stamp — every dataset names itself --- */
 .source-stamp {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.4rem 0.9rem;
-  margin-top: var(--space-xs);
-  padding-top: var(--space-xs);
-  border-top: 1px dashed var(--line-strong);
-  font-size: 0.76rem;
+  gap: var(--s-2) var(--s-4);
+  margin-top: var(--s-3);
+  padding-top: var(--s-3);
+  border-top: 1px dashed var(--line);
+  font-size: var(--text-small);
   color: var(--muted);
 }
 .source-stamp code {
+  font-family: var(--mono);
   font-size: 0.95em;
-  color: var(--water-800);
+  color: var(--water-strong);
 }
 
-/* --- 9.6 Official-record check card --- */
+/* --- Official-record check card --- */
 .check-card {
   display: grid;
-  gap: 0.35rem;
-  padding: var(--space-s);
+  gap: var(--s-1);
+  padding: var(--s-4);
   border: 1px solid var(--line);
-  border-left: 3px solid var(--water-700);
-  border-radius: var(--radius-md);
+  border-left: 3px solid var(--water);
+  border-radius: var(--r-data);
   background: var(--surface);
 }
 .check-card__title {
-  font-weight: 800;
-  font-size: 0.95rem;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--text-body);
 }
 .check-card__agency {
-  font-size: 0.78rem;
+  font-size: var(--text-small);
   color: var(--muted);
 }
 .check-card__ids {
-  font-size: 0.74rem;
-  color: var(--water-800);
-  font-weight: 700;
-  letter-spacing: 0.03em;
+  font-family: var(--mono);
+  font-size: 0.71rem;
+  color: var(--water-strong);
+  font-weight: 600;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
 }
 
-/* --- 9.7 HIN decode --- */
+/* --- HIN decode — the canonical mono identifier --- */
 .hin {
   display: flex;
   flex-wrap: wrap;
-  gap: 4px;
+  gap: var(--s-1);
   font-variant-numeric: tabular-nums;
 }
 .hin__seg {
   display: grid;
-  gap: 2px;
+  gap: var(--s-1);
   justify-items: center;
 }
 .hin__chars {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-family: var(--mono);
   font-weight: 700;
-  font-size: 1.05rem;
+  font-size: var(--text-body);
   letter-spacing: 0.08em;
   padding: 0.3rem 0.5rem;
-  border-radius: var(--radius-xs);
+  border-radius: var(--r-micro);
   background: var(--sky);
-  color: var(--ink-700);
+  color: var(--ink);
 }
 .hin__label {
-  font-size: 0.62rem;
+  font-family: var(--mono);
+  font-size: 0.71rem;
   text-transform: uppercase;
-  letter-spacing: 0.07em;
-  color: var(--muted);
+  letter-spacing: 0.1em;
+  color: var(--muted-strong);
 }
 
-/* --- 9.8 Numbered process steps (order carries real meaning) --- */
+/* --- Numbered process steps — the kicker speaks mono (design.md §5) --- */
 .steps {
   display: grid;
-  gap: var(--space-l);
+  gap: var(--s-6);
   counter-reset: step;
 }
 @media (min-width: 860px) {
@@ -1179,58 +1182,48 @@ hr {
 }
 .step {
   counter-increment: step;
-  padding-top: var(--space-s);
-  border-top: 2px solid var(--line-strong);
+  padding-top: var(--s-4);
+  border-top: 1px solid var(--line);
 }
 .step::before {
   content: counter(step, decimal-leading-zero);
   display: block;
-  font-size: 0.8rem;
-  font-weight: 800;
+  font-family: var(--mono);
+  font-size: var(--text-micro);
+  font-weight: 700;
   letter-spacing: 0.12em;
-  color: var(--accent-strong);
-  margin-bottom: var(--space-2xs);
+  color: var(--water);
+  margin-bottom: 14px;
 }
 .step h3 {
-  font-size: var(--step-1);
-  margin-bottom: var(--space-2xs);
+  margin-bottom: var(--s-2);
 }
 .step p {
-  color: var(--muted);
+  color: var(--muted-strong);
 }
 
-/* --- 9.9 Verified-coverage stats (numbers must trace to the ledger) --- */
+/* --- Coverage stats (mid-page light band; numerals are mono ink) --- */
 .stats {
   display: grid;
-  gap: var(--space-l);
+  gap: var(--s-6);
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
 }
 .stat__value {
-  font-size: clamp(2rem, 1.5rem + 2vw, 2.8rem);
-  font-weight: 800;
+  font-family: var(--mono);
+  font-size: var(--text-score);
+  font-weight: 700;
   line-height: 1;
-  letter-spacing: -0.02em;
-  color: var(--on-dark);
+  color: var(--ink);
   font-variant-numeric: tabular-nums;
 }
 .stat__label {
-  margin-top: var(--space-2xs);
-  font-size: 0.9rem;
-  color: var(--muted-on-dark);
-}
-
-/* --- 9.10 Hero layout with the product alongside the pitch --- */
-@media (min-width: 1000px) {
-  .hero__grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
-    gap: var(--space-2xl);
-    align-items: center;
-  }
+  margin-top: var(--s-2);
+  font-size: var(--text-small);
+  color: var(--muted);
 }
 
 /* ==========================================================================
-   7b. WAITLIST FORM
+   7b. WAITLIST FORM (design.md §5 inputs)
    ========================================================================== */
 
 .waitlist {
@@ -1238,18 +1231,16 @@ hr {
 }
 .waitlist__label {
   display: block;
+  font-size: var(--text-small);
   font-weight: 600;
   margin-bottom: 0.4rem;
-  color: var(--ink-900);
+  color: var(--ink);
 }
 .waitlist__row {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.6rem;
+  gap: var(--s-2);
 }
-/* When the row is too narrow to sit the input and button side by side they
-   wrap - and a button left at its natural width looks ragged under a
-   full-width input. Below the wrap point, make the button fill its own line. */
 @media (max-width: 30rem) {
   .waitlist__row .btn {
     flex: 1 1 100%;
@@ -1258,42 +1249,184 @@ hr {
 .waitlist__input {
   flex: 1 1 15rem;
   min-width: 0;
-  padding: 0.7rem 0.9rem;
+  padding: 12px 14px;
   font: inherit;
-  color: var(--ink-900);
-  background: #fff;
-  border: 1px solid rgba(16, 34, 46, 0.28);
-  border-radius: 8px;
+  color: var(--ink);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-small);
+}
+@media (hover: hover) {
+  .waitlist__input:hover {
+    border-color: var(--input-hover-border);
+  }
+}
+.waitlist__input::placeholder {
+  color: var(--muted);
 }
 .waitlist__input:focus-visible {
-  outline: 2px solid var(--brand-teal);
-  outline-offset: 2px;
-  border-color: var(--brand-teal);
+  outline: var(--focus-ring-input);
+  outline-offset: 1px;
+  border-color: var(--water);
 }
 .waitlist__note {
   margin-top: 0.6rem;
-  font-size: 0.85rem;
-  color: var(--ink-700);
+  font-size: var(--text-small);
+  color: var(--muted-strong);
 }
 .waitlist__status {
   margin-top: 0.5rem;
   min-height: 1.2em;
-  font-size: 0.9rem;
+  font-size: var(--text-small);
 }
-.waitlist__status[data-state='ok'] {
+.waitlist__status[data-state="ok"] {
   color: var(--success);
   font-weight: 600;
 }
-.waitlist__status[data-state='error'] {
+.waitlist__status[data-state="error"] {
   color: var(--danger);
   font-weight: 600;
 }
-.waitlist__status[data-state='pending'] {
-  color: var(--ink-700);
+.waitlist__status[data-state="pending"] {
+  color: var(--muted-strong);
 }
 
 /* ==========================================================================
-   8. PRINT BASELINE
+   7c. DARK FOOTER (design.md §4b) — --deep + the Hump SVG right-anchored
+   behind a left scrim, closing the page the way the hero opens it. The GMRT
+   attribution required by the asset ships in the meta block.
+   ========================================================================== */
+
+.site-footer {
+  position: relative;
+  background-color: var(--deep);
+  background-image: linear-gradient(
+      90deg,
+      var(--deep) 0%,
+      rgba(6, 47, 62, 0.75) 45%,
+      rgba(6, 47, 62, 0) 72%
+    ),
+    url("assets/hump-bathymetry.svg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: right center;
+  color: var(--sky);
+  border-top: 1px solid var(--line);
+}
+.site-footer a {
+  color: #fff;
+}
+.site-footer__inner {
+  position: relative;
+  z-index: 1;
+  max-width: 1160px;
+  margin-inline: auto;
+  padding: var(--s-8) clamp(18px, 4vw, 40px);
+}
+.site-footer__top {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--s-7);
+  padding-bottom: var(--s-6);
+}
+.site-footer .brand {
+  color: #fff;
+}
+.site-footer .brand__true {
+  color: var(--brand-true-on-deep);
+}
+.site-footer .brand__hull {
+  color: var(--brand-hull);
+}
+/* The footer closes the page with a larger brand lockup than the header
+   (design.md §4b / design.html footer): a 52px mark + a larger wordmark. */
+.site-footer .brand__mark {
+  width: 52px;
+  height: 52px;
+}
+.site-footer .brand__wordmark {
+  font-size: clamp(1.6rem, 3vw, 2.25rem);
+}
+.site-footer__tagline {
+  margin-top: var(--s-3);
+  color: var(--sky);
+  max-width: 40ch;
+}
+.site-footer__nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-5) var(--s-7);
+}
+.site-footer__col h2 {
+  font-family: var(--mono);
+  font-size: 0.71rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: #fff;
+  margin-bottom: var(--s-3);
+}
+.site-footer__col ul {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: 0.55rem;
+  font-size: var(--text-small);
+}
+.site-footer__col a {
+  display: inline-block;
+  padding-block: 11px; /* ~44px touch target (design.md §0.6) */
+}
+/* Footer bottom — mobile-first stacked and centered; on wide screens it
+   becomes one line, three parts: copyright (left), waitlist-privacy note
+   (center), GMRT credit (right). */
+.site-footer__bottom {
+  display: grid;
+  grid-template-columns: 1fr;
+  justify-items: center;
+  align-items: center;
+  gap: var(--s-3) var(--s-4);
+  padding-top: var(--s-5);
+  border-top: 1px solid rgba(233, 246, 248, 0.18);
+  font-family: var(--mono);
+  font-size: 0.71rem;
+  letter-spacing: 0.02em;
+  color: var(--sky);
+  text-align: center;
+}
+.site-footer__bottom > p {
+  margin: 0;
+}
+/* The GMRT attribution required by the hump SVG (design.md §1) — on the same
+   line as the copyright, still muted toward the chart-chrome register:
+   rgba(233,246,248,0.6) composites to ~5.56:1 on --deep, the footer's own
+   translucent-chrome idiom. */
+.site-footer__credit {
+  letter-spacing: 0.1em;
+  color: rgba(233, 246, 248, 0.6);
+}
+/* Wide screens: one line — copyright left, privacy centered, GMRT right.
+   auto 1fr auto gives the long centered privacy note (~500px) the room to
+   hold a single line; below this it stacks. */
+@media (min-width: 1160px) {
+  .site-footer__bottom {
+    grid-template-columns: 1fr auto 1fr; /* equal outer cols → true center */
+    gap: var(--s-3);
+    letter-spacing: 0; /* drops the ~500px note to ~485px so it fits one line */
+    text-align: left;
+  }
+  .site-footer__privacy {
+    text-align: center;
+    white-space: nowrap;
+  }
+  .site-footer__credit {
+    text-align: right;
+  }
+}
+
+/* ==========================================================================
+   8. PRINT — deep bands print ink-on-white without the SVG (design.md §5)
    ========================================================================== */
 
 @media print {
@@ -1309,9 +1442,38 @@ hr {
   a {
     color: #111;
   }
-  .section--ink,
+  .hero,
   .site-footer {
     background: #fff !important;
     color: #111 !important;
+    border-top: 1px solid var(--line);
+  }
+  .hero h1,
+  .hero .lede,
+  .hero__note,
+  .site-footer p,
+  .site-footer__tagline,
+  .site-footer__bottom,
+  .site-footer__col h2,
+  .site-footer .brand__true,
+  .site-footer .brand__hull {
+    color: #111 !important;
+  }
+  .site-footer a {
+    color: #111 !important;
+  }
+}
+
+/* ==========================================================================
+   Reduced motion — lift/press neutralization (design.md §6)
+   Placed last so these per-selector transform:none rules win by source order
+   over the button hover/active transforms above. The skip-link's positioning
+   transform is deliberately untouched (never a blanket * { transform: none }).
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  .btn:active,
+  .btn--primary:hover,
+  .btn--primary:active {
+    transform: none;
   }
 }

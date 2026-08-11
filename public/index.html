@@ -12,7 +12,7 @@
       name="description"
       content="TrueHull turns a used-boat listing into an organized due-diligence checklist: risk flags, NOAA/NHC storm-exposure guidance for the Atlantic, Gulf and eastern Pacific basins, HIN format review, and the official records to check in all 50 states."
     />
-    <meta name="theme-color" content="#06222e" />
+    <meta name="theme-color" content="#062f3e" />
     <link rel="canonical" href="https://gettruehull.com/" />
 
     <meta property="og:title" content="TrueHull — Know the risk before you buy" />
@@ -41,6 +41,13 @@
     />
     <link
       rel="preload"
+      href="assets/fonts/source-serif-4-latin-700-normal.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
       href="assets/fonts/orbitron-900-latin.woff2"
       as="font"
       type="font/woff2"
@@ -51,8 +58,10 @@
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
 
+    <aside class="rail" aria-hidden="true"><span>TrueHull · Islamorada Hump · 24° 48.175′ N, 80° 26.674′ W</span></aside>
+
     <header class="site-header">
-      <div class="container site-header__inner">
+      <div class="site-header__inner">
         <a class="brand" href="#top" aria-label="TrueHull home">
           <img class="brand__mark" src="assets/truehull-mark.png" alt="" width="40" height="40" />
           <span class="brand__wordmark" aria-label="TrueHull">
@@ -76,7 +85,7 @@
               <li><a class="site-nav__link" href="#about">About</a></li>
               <li><a class="site-nav__link" href="#limits">Limits</a></li>
             </ul>
-            <a class="btn btn--primary" href="#contact">Get in touch</a>
+            <a class="btn btn--secondary" href="#contact">Get in touch</a>
           </div>
         </nav>
       </div>
@@ -85,13 +94,13 @@
     <main id="main">
       <span id="top"></span>
 
-      <!-- ============ HERO: the product is the pitch ============ -->
+      <!-- ============ HERO: deep chart band (real GMRT hump bathymetry) ============ -->
       <section class="hero" aria-labelledby="hero-title">
-        <div class="container hero__inner">
+        <div class="hero__inner">
           <div class="hero__grid">
             <div>
               <p class="eyebrow">Pre-purchase due diligence for boat buyers</p>
-              <h1 id="hero-title">Know the risk before you buy.</h1>
+              <h1 id="hero-title">Know the risk <em>before</em> you buy.</h1>
               <p class="lede">
                 Paste a listing, or type the details in, and TrueHull returns an organized
                 checklist: what the details flag, which official records to pull for
@@ -172,8 +181,8 @@
       </section>
 
       <!-- ============ HOW IT WORKS ============ -->
-      <section id="how" class="section" aria-labelledby="how-title">
-        <div class="container">
+      <section id="how" class="band" aria-labelledby="how-title">
+        <div class="shell">
           <p class="eyebrow">How it works</p>
           <h2 id="how-title">Three steps, one document you can print.</h2>
           <div class="steps section__body">
@@ -204,8 +213,8 @@
       </section>
 
       <!-- ============ STORM DATA ============ -->
-      <section id="storm" class="section section--foam" aria-labelledby="storm-title">
-        <div class="container">
+      <section id="storm" class="band band--tint" aria-labelledby="storm-title">
+        <div class="shell">
           <p class="eyebrow">Where the guidance comes from</p>
           <h2 id="storm-title">Real hurricane tracks, not a vague warning.</h2>
           <p class="lede section__body">
@@ -279,8 +288,8 @@
       </section>
 
       <!-- ============ OFFICIAL RECORDS ============ -->
-      <section id="records" class="section" aria-labelledby="records-title">
-        <div class="container">
+      <section id="records" class="band" aria-labelledby="records-title">
+        <div class="shell">
           <p class="eyebrow">The part buyers get stuck on</p>
           <h2 id="records-title">Boat records are scattered across state and federal agencies. We route you.</h2>
           <p class="lede section__body">
@@ -336,8 +345,8 @@
       </section>
 
       <!-- ============ HIN ============ -->
-      <section class="section section--foam" aria-labelledby="hin-title">
-        <div class="container">
+      <section class="band band--tint" aria-labelledby="hin-title">
+        <div class="shell">
           <p class="eyebrow">Hull identification</p>
           <h2 id="hin-title">We check the format, then tell you what to do with it.</h2>
           <div class="grid grid--2 section__body">
@@ -387,8 +396,8 @@
       </section>
 
       <!-- ============ ABOUT ============ -->
-      <section id="about" class="section" aria-labelledby="about-title">
-        <div class="container">
+      <section id="about" class="band" aria-labelledby="about-title">
+        <div class="shell">
           <p class="eyebrow">About</p>
           <h2 id="about-title">Why TrueHull exists</h2>
           <div class="grid grid--2 section__body">
@@ -441,9 +450,9 @@
       </section>
 
       <!-- ============ LIMITS ============ -->
-      <section id="limits" class="section section--ink" aria-labelledby="limits-title">
-        <div class="container">
-          <p class="eyebrow eyebrow--on-dark">Honesty as architecture</p>
+      <section id="limits" class="band band--tint" aria-labelledby="limits-title">
+        <div class="shell">
+          <p class="eyebrow">Honesty as architecture</p>
           <h2 id="limits-title">We tell you what no report can verify.</h2>
           <p class="lede section__body">
             Sections that make a data claim state their own limits, and each report carries a confidence
@@ -481,8 +490,8 @@
       </section>
 
       <!-- ============ SAMPLE / CTA ============ -->
-      <section id="contact" class="section" aria-labelledby="contact-title">
-        <div class="container">
+      <section id="contact" class="band" aria-labelledby="contact-title">
+        <div class="shell">
           <p class="eyebrow">The waitlist</p>
           <h2 id="contact-title">Building the first version of TrueHull</h2>
           <div class="prose section__body">
@@ -539,8 +548,8 @@
       </section>
 
       <!-- ============ WAITLIST PRIVACY ============ -->
-      <section id="waitlist-privacy" class="section section--foam" aria-labelledby="waitlist-privacy-title">
-        <div class="container">
+      <section id="waitlist-privacy" class="band band--tint" aria-labelledby="waitlist-privacy-title">
+        <div class="shell">
           <p class="eyebrow">Waitlist privacy</p>
           <h2 id="waitlist-privacy-title">The waitlist collects your email, and nothing else.</h2>
           <div class="prose section__body">
@@ -569,7 +578,7 @@
     </main>
 
     <footer class="site-footer">
-      <div class="container">
+      <div class="site-footer__inner">
         <div class="site-footer__top">
           <div>
             <a class="brand" href="#top" aria-label="TrueHull home">
@@ -602,7 +611,8 @@
         </div>
         <div class="site-footer__bottom">
           <p>&copy; 2026 TrueHull. All rights reserved.</p>
-          <p><a href="#waitlist-privacy">Waitlist privacy</a> · Sample report figures use illustrative vessel data.</p>
+          <p class="site-footer__privacy"><a href="#waitlist-privacy">Waitlist privacy</a> · Sample report figures use illustrative vessel data.</p>
+          <p class="site-footer__credit">Bathymetry: GMRT (gmrt.org)</p>
         </div>
       </div>
     </footer>
