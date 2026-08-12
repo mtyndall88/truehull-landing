@@ -1172,7 +1172,7 @@ hr {
 /* --- Numbered process steps — the kicker speaks mono (design.md §5) --- */
 .steps {
   display: grid;
-  gap: var(--s-6);
+  gap: var(--s-5);
   counter-reset: step;
 }
 @media (min-width: 860px) {
@@ -1180,10 +1180,15 @@ hr {
     grid-template-columns: repeat(3, 1fr);
   }
 }
+/* Numbered feature cards (design.md §5): a flat --surface card with the mono
+   kicker (--water 700, --text-micro, 14px below-gap) → serif heading → body.
+   Not interactive (not link targets), so no hover lift / active state. */
 .step {
   counter-increment: step;
-  padding-top: var(--s-4);
-  border-top: 1px solid var(--line);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-data);
+  padding: var(--s-5);
 }
 .step::before {
   content: counter(step, decimal-leading-zero);
@@ -1198,8 +1203,9 @@ hr {
 .step h3 {
   margin-bottom: var(--s-2);
 }
+/* Body sits on the white card surface — --muted is legible here (4.67:1). */
 .step p {
-  color: var(--muted-strong);
+  color: var(--muted);
 }
 
 /* --- Coverage stats (mid-page light band; numerals are mono ink) --- */
@@ -1398,6 +1404,16 @@ hr {
 .site-footer__bottom > p {
   margin: 0;
 }
+/* The copyright + trademark attribution (grouped legal notices), left cell. */
+.site-footer__legal {
+  display: grid;
+  gap: var(--s-1);
+}
+/* Right cell: the GMRT credit with the waitlist-privacy link stacked beneath. */
+.site-footer__end {
+  display: grid;
+  gap: var(--s-1);
+}
 /* The GMRT attribution required by the hump SVG (design.md §1) — on the same
    line as the copyright, still muted toward the chart-chrome register:
    rgba(233,246,248,0.6) composites to ~5.56:1 on --deep, the footer's own
@@ -1412,6 +1428,8 @@ hr {
 @media (min-width: 1160px) {
   .site-footer__bottom {
     grid-template-columns: 1fr auto 1fr; /* equal outer cols → true center */
+    align-items: start; /* copyright/privacy/credit share the top line; the
+                           trademark attribution sits under the copyright */
     gap: var(--s-3);
     letter-spacing: 0; /* drops the ~500px note to ~485px so it fits one line */
     text-align: left;
@@ -1420,7 +1438,7 @@ hr {
     text-align: center;
     white-space: nowrap;
   }
-  .site-footer__credit {
+  .site-footer__end {
     text-align: right;
   }
 }
