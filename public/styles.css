@@ -18,8 +18,9 @@
        --shadow-soft lift is earned on hover only.
      - Rectangular mono flag stamps (no pills).
      - Serif display headings; the hero display at --text-display (4.4rem).
-     - Hero and footer are --deep bands carrying the committed GMRT Hump
-       bathymetry SVG (real data; GMRT credit ships in the footer). --deep is
+     - Hero and footer are --deep bands carrying the NOAA BlueTopo Islamorada
+       Hump contour SVG (real bathymetry as subtle background texture; U.S.
+       federal public domain — no attribution). --deep is
        reserved for hero / footer / map chrome — never a mid-page theme.
 
    Zero external requests: all fonts and the hump SVG are self-hosted. The
@@ -833,18 +834,21 @@ hr {
 
 /* --- 7.8 The fix voice on deep is set above; hero + footer follow --- */
 
-/* --- 7.9 Hero — --deep band carrying the committed GMRT Hump SVG, under a
-   bottom scrim so the trailing type never contests the chart art. The
-   background lives on the band element; --deep is reserved for hero/footer. */
+/* --- 7.9 Hero — --deep band carrying the NOAA BlueTopo Islamorada Hump
+   contour SVG, under a bottom scrim so the trailing type never contests the
+   chart art (real bathymetry shown as subtle background texture, not a
+   navigational chart). The background lives on the band element; --deep is
+   reserved for hero/footer. */
 .hero {
   position: relative;
   background-color: var(--deep);
   background-image: linear-gradient(
-      0deg,
-      rgba(6, 47, 62, 0.85) 0%,
-      rgba(6, 47, 62, 0) 30%
+      90deg,
+      rgba(6, 47, 62, 0.88) 0%,
+      rgba(6, 47, 62, 0.58) 42%,
+      rgba(6, 47, 62, 0.12) 100%
     ),
-    url("assets/hump-bathymetry.svg");
+    url("assets/islamorada-hump-contours.svg");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
@@ -1298,9 +1302,10 @@ hr {
 }
 
 /* ==========================================================================
-   7c. DARK FOOTER (design.md §4b) — --deep + the Hump SVG right-anchored
-   behind a left scrim, closing the page the way the hero opens it. The GMRT
-   attribution required by the asset ships in the meta block.
+   7c. DARK FOOTER (design.md §4b) — --deep + the NOAA BlueTopo Islamorada Hump
+   contour SVG right-anchored behind a left scrim, closing the page the way the
+   hero opens it. BlueTopo is U.S. federal public-domain data — no attribution
+   required, so the footer carries no bathymetry credit.
    ========================================================================== */
 
 .site-footer {
@@ -1309,10 +1314,10 @@ hr {
   background-image: linear-gradient(
       90deg,
       var(--deep) 0%,
-      rgba(6, 47, 62, 0.75) 45%,
-      rgba(6, 47, 62, 0) 72%
+      rgba(6, 47, 62, 0.78) 45%,
+      rgba(6, 47, 62, 0.5) 100%
     ),
-    url("assets/hump-bathymetry.svg");
+    url("assets/islamorada-hump-contours.svg");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: right center;
@@ -1385,8 +1390,8 @@ hr {
   padding-block: 11px; /* ~44px touch target (design.md §0.6) */
 }
 /* Footer bottom — mobile-first stacked and centered; on wide screens it
-   becomes one line, three parts: copyright (left), waitlist-privacy note
-   (center), GMRT credit (right). */
+   becomes one line, three parts: copyright (left), sample-data note
+   (center), waitlist-privacy link (right). */
 .site-footer__bottom {
   display: grid;
   grid-template-columns: 1fr;
@@ -1409,36 +1414,22 @@ hr {
   display: grid;
   gap: var(--s-1);
 }
-/* Right cell: the GMRT credit with the waitlist-privacy link stacked beneath. */
-.site-footer__end {
-  display: grid;
-  gap: var(--s-1);
-}
-/* The GMRT attribution required by the hump SVG (design.md §1) — on the same
-   line as the copyright, still muted toward the chart-chrome register:
-   rgba(233,246,248,0.6) composites to ~5.56:1 on --deep, the footer's own
-   translucent-chrome idiom. */
-.site-footer__credit {
-  letter-spacing: 0.1em;
-  color: rgba(233, 246, 248, 0.6);
-}
-/* Wide screens: one line — copyright left, privacy centered, GMRT right.
-   auto 1fr auto gives the long centered privacy note (~500px) the room to
-   hold a single line; below this it stacks. */
+/* Wide screens: one line — copyright left, sample-data note centered,
+   waitlist-privacy link right; below this it stacks. */
 @media (min-width: 1160px) {
   .site-footer__bottom {
     grid-template-columns: 1fr auto 1fr; /* equal outer cols → true center */
-    align-items: start; /* copyright/privacy/credit share the top line; the
+    align-items: start; /* copyright/note/link share the top line; the
                            trademark attribution sits under the copyright */
     gap: var(--s-3);
-    letter-spacing: 0; /* drops the ~500px note to ~485px so it fits one line */
+    letter-spacing: 0; /* drops the centered note so it fits one line */
     text-align: left;
   }
   .site-footer__privacy {
     text-align: center;
     white-space: nowrap;
   }
-  .site-footer__end {
+  .site-footer__privacy-link {
     text-align: right;
   }
 }
