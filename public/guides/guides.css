@@ -1,0 +1,300 @@
+/* ==========================================================================
+   TrueHull - Guides (SEO content section)
+   --------------------------------------------------------------------------
+   Layered on top of /styles.css: reuses the Chartroom v1.4 tokens, the
+   sticky nav, the dark footer, the vendored fonts, the buttons, and the fix
+   (crosshair eyebrow). This file adds only the reading layout for the guides
+   index and the article template. No new external requests; tokens only.
+   Load order on every guide page: /styles.css then this file.
+   ========================================================================== */
+
+/* Guide pages omit the >=1240px chart-margin rail (content-first reading),
+   so cancel the left padding the rail reserves on the homepage body. */
+@media (min-width: 1240px) {
+  body.guide {
+    padding-left: 0;
+  }
+}
+
+/* Shared centered container for guide surfaces. */
+.guide-shell {
+  width: 100%;
+  max-width: 1160px;
+  margin-inline: auto;
+  padding-inline: clamp(18px, 4vw, 40px);
+}
+
+/* --------------------------------------------------------------------------
+   Guides index
+   -------------------------------------------------------------------------- */
+.guides-intro {
+  padding-block: clamp(48px, 8vw, 96px) clamp(24px, 4vw, 40px);
+}
+.guides-intro h1 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--text-h2-marketing);
+  line-height: 1.15;
+  max-width: 22ch;
+  color: var(--ink);
+}
+.guides-intro .lede {
+  margin-top: var(--s-4);
+  color: var(--muted-strong);
+  max-width: var(--measure);
+}
+
+.guide-grid {
+  display: grid;
+  gap: var(--s-5);
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  padding-bottom: clamp(56px, 9vw, 104px);
+}
+a.guide-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-data);
+  padding: var(--s-5);
+  color: inherit;
+  text-decoration: none;
+  transition: transform var(--motion-base) var(--ease-decel),
+    box-shadow var(--motion-base) var(--ease-decel);
+}
+@media (hover: hover) {
+  a.guide-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-soft);
+  }
+}
+a.guide-card:focus-visible {
+  outline: 2px solid var(--water);
+  outline-offset: 2px;
+}
+.guide-card__kicker {
+  font-family: var(--mono);
+  font-size: 0.71rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--water-strong);
+}
+.guide-card__title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--text-h3);
+  line-height: 1.3;
+  color: var(--ink);
+}
+.guide-card__excerpt {
+  color: var(--muted);
+  font-size: var(--text-small);
+  line-height: 1.6;
+}
+.guide-card__more {
+  margin-top: auto;
+  font-family: var(--mono);
+  font-size: 0.71rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--water);
+}
+
+/* --------------------------------------------------------------------------
+   Article
+   -------------------------------------------------------------------------- */
+.guide-article {
+  padding-bottom: clamp(56px, 9vw, 104px);
+}
+
+/* Breadcrumb (visual; a BreadcrumbList JSON-LD block mirrors it for crawlers). */
+.guide-breadcrumb {
+  padding-top: clamp(20px, 3vw, 32px);
+  font-family: var(--mono);
+  font-size: 0.71rem;
+  letter-spacing: 0.06em;
+}
+.guide-breadcrumb ol {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 0;
+  margin: 0;
+  color: var(--muted-strong);
+}
+.guide-breadcrumb li {
+  display: flex;
+  gap: 6px;
+}
+.guide-breadcrumb li::after {
+  content: "/";
+  color: var(--input-hover-border);
+}
+.guide-breadcrumb li:last-child::after {
+  content: "";
+}
+.guide-breadcrumb a {
+  color: var(--water);
+}
+
+.guide-header {
+  padding-block: clamp(16px, 3vw, 28px) clamp(24px, 4vw, 40px);
+  border-bottom: 1px solid var(--line);
+}
+.guide-header h1 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--text-h2-marketing);
+  line-height: 1.12;
+  letter-spacing: -0.01em;
+  max-width: 20ch;
+  color: var(--ink);
+  text-wrap: balance;
+}
+.guide-meta {
+  margin-top: var(--s-4);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  font-family: var(--mono);
+  font-size: 0.71rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted-strong);
+}
+
+/* A visible marker for the placeholder sample only; real articles omit it. */
+.guide-sample-note {
+  margin-top: clamp(16px, 3vw, 24px);
+  padding: var(--s-3) var(--s-4);
+  background: var(--sky);
+  border: 1px solid var(--input-hover-border);
+  border-left: 3px solid var(--accent-ink);
+  border-radius: var(--r-data);
+  color: var(--ink);
+  font-size: var(--text-small);
+  line-height: 1.6;
+}
+
+.guide-prose {
+  max-width: 68ch;
+  margin-top: clamp(24px, 4vw, 40px);
+}
+.guide-prose > * + * {
+  margin-top: var(--s-5);
+}
+.guide-prose > h2 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--text-h2);
+  line-height: 1.25;
+  margin-top: clamp(32px, 5vw, 48px);
+  color: var(--ink);
+}
+.guide-prose > h3 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--text-h3);
+  line-height: 1.3;
+  margin-top: var(--s-6);
+  color: var(--ink);
+}
+.guide-prose p,
+.guide-prose li {
+  font-size: var(--text-body);
+  line-height: 1.7;
+  color: var(--ink);
+}
+.guide-prose ul,
+.guide-prose ol {
+  padding-left: 1.3em;
+  display: grid;
+  gap: var(--s-2);
+}
+.guide-prose a {
+  color: var(--water);
+}
+@media (hover: hover) {
+  .guide-prose a:hover {
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+  }
+}
+.guide-prose strong {
+  font-weight: 700;
+}
+.guide-prose blockquote {
+  border-left: 3px solid var(--water);
+  padding-left: var(--s-4);
+  color: var(--muted-strong);
+}
+
+/* Waitlist call to action inside the article (a --deep band, closing move). */
+.guide-cta {
+  margin-top: clamp(40px, 7vw, 72px);
+  padding: clamp(28px, 4vw, 40px);
+  background-color: var(--deep);
+  color: #fff;
+  border-radius: var(--r-data);
+}
+.guide-cta h2 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--text-h3);
+  color: #fff;
+}
+.guide-cta p {
+  margin-top: var(--s-3);
+  color: var(--sky);
+  max-width: 52ch;
+}
+.guide-cta .actions {
+  margin-top: var(--s-5);
+}
+
+/* Related guides (internal linking). */
+.guide-related {
+  margin-top: clamp(40px, 7vw, 72px);
+}
+.guide-related h2 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--text-h3);
+  color: var(--ink);
+}
+.guide-related ul {
+  list-style: none;
+  padding: 0;
+  margin-top: var(--s-4);
+  display: grid;
+  gap: var(--s-3);
+}
+.guide-related a {
+  color: var(--water);
+  font-weight: 600;
+}
+
+/* --------------------------------------------------------------------------
+   Print - articles print clean, ink on white, no dark bands
+   -------------------------------------------------------------------------- */
+@media print {
+  .guide-breadcrumb,
+  .guide-related {
+    display: none !important;
+  }
+  .guide-cta {
+    background: #fff !important;
+    color: #111 !important;
+    border: 1px solid #999;
+  }
+  .guide-cta h2,
+  .guide-cta p {
+    color: #111 !important;
+  }
+  .guide-sample-note {
+    background: #fff !important;
+  }
+}

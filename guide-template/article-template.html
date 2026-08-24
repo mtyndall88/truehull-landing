@@ -1,0 +1,231 @@
+<!--
+  TrueHull guide article TEMPLATE. This file lives OUTSIDE public/ and is NEVER
+  deployed (the Pages workflow publishes public/ only). To create an article:
+
+  1. Copy this file to  public/guides/<slug>/index.html
+     (folder-with-index gives the clean URL gettruehull.com/guides/<slug>/).
+  2. Replace every {{PLACEHOLDER}} below. They are:
+       {{TITLE}}          Article title (plain text, no trademark symbol).
+       {{SLUG}}           The folder name / URL slug, e.g. how-to-check-a-used-boat.
+       {{DESCRIPTION}}    ~150-char meta description. No pricing. No em dashes.
+       {{KICKER}}         Small category label, e.g. "Buying guide".
+       {{DATE_ISO}}       Publish date, YYYY-MM-DD (used in schema + og).
+       {{DATE_MODIFIED_ISO}}  Last-updated date, YYYY-MM-DD.
+       {{DATE_HUMAN}}     Human date for the visible byline, e.g. "August 23, 2026".
+       {{READ_TIME}}      e.g. "About a 6 minute read".
+       {{IMAGE_URL}}      Absolute URL of the share image. Default is the logo;
+                          for best social cards use an article image ~1200x630.
+       {{BODY}}           The article HTML: h2 sections, <p>, <ul>/<ol>. One h1
+                          only (already in the header). No inline styles (CSP).
+       {{RELATED_LINKS}}  <li><a href="/guides/other-slug/">Title</a></li> items.
+  3. Add a <a class="guide-card"> entry for it in public/guides/index.html.
+  4. Add a <url> block for it in public/sitemap.xml (copy an existing one).
+
+  RULES (from docs/plans/landing-review-brief.md, non-negotiable):
+    - No pricing anywhere. No em dashes in any copy (use commas/periods/colons).
+    - Exactly ONE trademark symbol per page: it rides the nav wordmark (already
+      here). Do NOT add a second one in the title, prose, or footer; never the
+      circled-R symbol. Never a mark symbol in <title>, aria-label, or a URL.
+    - BARD-off: do NOT claim TrueHull searches a Coast Guard accident record.
+      Do NOT use the literal phrase the deploy gate blocks. Framing accident
+      history as something a records check does NOT reveal is fine.
+    - Records routing: say "routes you to official and authoritative sources",
+      never "official sources only", never a verb implying TrueHull performs,
+      queries, retrieves, stores, or verifies the search.
+    - Coming-soon honesty: never imply the service is live or in use. The
+      waitlist CTA and "when it is ready" framing are how we say that.
+    - No competitor names. No storm-map screenshots or interactive demo. No hard
+      per-report counts (say "a dozen-plus", verify any number against the app).
+    - Keep it self-contained: no new external requests; reuse /styles.css,
+      /guides/guides.css, the vendored fonts, and /assets/site.js.
+-->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'; connect-src 'self' https://app.loops.so; form-action 'self' https://app.loops.so; img-src 'self'; style-src 'self'; font-src 'self'; base-uri 'self'; object-src 'none'"
+    />
+    <title>{{TITLE}} | TrueHull</title>
+    <meta name="description" content="{{DESCRIPTION}}" />
+    <meta name="theme-color" content="#062f3e" />
+    <link rel="canonical" href="https://gettruehull.com/guides/{{SLUG}}/" />
+
+    <meta property="og:title" content="{{TITLE}}" />
+    <meta property="og:description" content="{{DESCRIPTION}}" />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://gettruehull.com/guides/{{SLUG}}/" />
+    <meta property="og:image" content="{{IMAGE_URL}}" />
+    <meta property="article:published_time" content="{{DATE_ISO}}" />
+    <meta property="article:modified_time" content="{{DATE_MODIFIED_ISO}}" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="{{TITLE}}" />
+    <meta name="twitter:description" content="{{DESCRIPTION}}" />
+    <meta name="twitter:image" content="{{IMAGE_URL}}" />
+
+    <link rel="icon" href="/assets/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png" />
+    <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png" />
+
+    <link rel="preload" href="/assets/fonts/inter-latin-var.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/assets/fonts/source-serif-4-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="stylesheet" href="/styles.css" />
+    <link rel="stylesheet" href="/guides/guides.css" />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": "{{TITLE}}",
+        "description": "{{DESCRIPTION}}",
+        "image": "{{IMAGE_URL}}",
+        "datePublished": "{{DATE_ISO}}",
+        "dateModified": "{{DATE_MODIFIED_ISO}}",
+        "inLanguage": "en-US",
+        "author": { "@type": "Organization", "name": "TrueHull", "url": "https://gettruehull.com/" },
+        "publisher": {
+          "@type": "Organization",
+          "name": "TrueHull",
+          "logo": { "@type": "ImageObject", "url": "https://gettruehull.com/assets/truehull-logo.webp" }
+        },
+        "mainEntityOfPage": { "@type": "WebPage", "@id": "https://gettruehull.com/guides/{{SLUG}}/" }
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://gettruehull.com/" },
+          { "@type": "ListItem", "position": 2, "name": "Guides", "item": "https://gettruehull.com/guides/" },
+          { "@type": "ListItem", "position": 3, "name": "{{TITLE}}", "item": "https://gettruehull.com/guides/{{SLUG}}/" }
+        ]
+      }
+    </script>
+  </head>
+  <body class="guide">
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="site-header">
+      <div class="site-header__inner">
+        <a class="brand" href="/" aria-label="TrueHull home">
+          <img class="brand__mark" src="/assets/truehull-mark.png" alt="" width="40" height="40" />
+          <span class="brand__wordmark" aria-label="TrueHull">
+            <span class="brand__true">True</span><span class="brand__hull">Hull</span><span class="brand-tm" aria-hidden="true">&trade;</span>
+          </span>
+        </a>
+        <nav class="site-nav" aria-label="Primary">
+          <button class="site-nav__toggle" type="button" aria-expanded="false" aria-controls="primary-menu">Menu</button>
+          <div class="site-nav__panel" id="primary-menu">
+            <ul class="site-nav__list">
+              <li><a class="site-nav__link" href="/#how">How it works</a></li>
+              <li><a class="site-nav__link" href="/#storm">Storm data</a></li>
+              <li><a class="site-nav__link" href="/#records">Official records</a></li>
+              <li><a class="site-nav__link" href="/#about">About</a></li>
+              <li><a class="site-nav__link" href="/#limits">Limits</a></li>
+              <li><a class="site-nav__link" href="/guides/">Guides</a></li>
+            </ul>
+            <a class="btn btn--secondary" href="/#contact">Get in touch</a>
+          </div>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main" class="guide-shell">
+      <nav class="guide-breadcrumb" aria-label="Breadcrumb">
+        <ol>
+          <li><a href="/">Home</a></li>
+          <li><a href="/guides/">Guides</a></li>
+          <li>{{TITLE}}</li>
+        </ol>
+      </nav>
+
+      <article class="guide-article">
+        <header class="guide-header">
+          <p class="eyebrow">{{KICKER}}</p>
+          <h1>{{TITLE}}</h1>
+          <p class="guide-meta">
+            <span>By TrueHull</span>
+            <span>Updated {{DATE_HUMAN}}</span>
+            <span>{{READ_TIME}}</span>
+          </p>
+        </header>
+
+        <div class="guide-prose">
+          {{BODY}}
+        </div>
+
+        <aside class="guide-cta">
+          <h2>TrueHull is being built for exactly this</h2>
+          <p>
+            TrueHull turns a listing into an organized due-diligence checklist:
+            what the details flag, which official records to pull for your state,
+            and what to ask before money moves. It is in active development. Join the
+            launch waitlist and we will email you once, when it is ready to use.
+          </p>
+          <div class="actions">
+            <a class="btn btn--primary" href="/#contact">Join the launch waitlist</a>
+            <a class="btn btn--on-dark" href="/#how">See how it works</a>
+          </div>
+        </aside>
+
+        <nav class="guide-related" aria-label="Related guides">
+          <h2>Keep reading</h2>
+          <ul>
+            {{RELATED_LINKS}}
+            <li><a href="/guides/">Browse all boat buying guides</a></li>
+          </ul>
+        </nav>
+      </article>
+    </main>
+
+    <footer class="site-footer">
+      <div class="site-footer__inner">
+        <div class="site-footer__top">
+          <div>
+            <a class="brand" href="/" aria-label="TrueHull home">
+              <img class="brand__mark" src="/assets/truehull-mark.png" alt="" width="40" height="40" />
+              <span class="brand__wordmark">
+                <span class="brand__true">True</span><span class="brand__hull">Hull</span>
+              </span>
+            </a>
+            <p class="site-footer__tagline">Know the risk before you buy.</p>
+          </div>
+          <nav class="site-footer__nav" aria-label="Footer">
+            <div class="site-footer__col">
+              <h2>Explore</h2>
+              <ul>
+                <li><a href="/#how">How it works</a></li>
+                <li><a href="/#storm">Storm data</a></li>
+                <li><a href="/#records">Official records</a></li>
+                <li><a href="/#about">About</a></li>
+                <li><a href="/#limits">Limits</a></li>
+                <li><a href="/guides/">Guides</a></li>
+              </ul>
+            </div>
+            <div class="site-footer__col">
+              <h2>Contact</h2>
+              <ul>
+                <li><a href="mailto:mark@gettruehull.com?subject=TrueHull%20Inquiry">mark@gettruehull.com</a></li>
+                <li><a href="mailto:support@gettruehull.com?subject=TrueHull%20Support">support@gettruehull.com</a></li>
+              </ul>
+            </div>
+          </nav>
+        </div>
+        <div class="site-footer__bottom">
+          <div class="site-footer__legal">
+            <p>&copy; 2026 TrueHull LLC. All rights reserved.</p>
+            <p>TrueHull is a trademark of TrueHull LLC.</p>
+          </div>
+          <p class="site-footer__privacy">Sample report figures use illustrative vessel data.</p>
+          <p class="site-footer__privacy-link"><a href="/#waitlist-privacy">Waitlist privacy</a></p>
+        </div>
+      </div>
+    </footer>
+
+    <script src="/assets/site.js" defer></script>
+  </body>
+</html>
